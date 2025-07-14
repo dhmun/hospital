@@ -1,1 +1,4695 @@
 
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Highcharts Sunburst with Popup</title>
+<style>
+/* CSS 스타일은 이전과 동일 */
+.highcharts-figure, .highcharts-data-table table { min-width: 320px; max-width: 800px; margin: 1em auto; }
+#container { height: 800px; }
+</style>
+</head>
+<body>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/sunburst.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<figure class="highcharts-figure">
+  <div id="container"></div>
+</figure>
+
+<script>
+var data = [
+  {
+    "id": "root",
+    "parent": "",
+    "name": "전체 시설"
+  },
+  {
+    "id": "root/약국",
+    "parent": "root",
+    "name": "약국"
+  },
+  {
+    "id": "root/약국/평양시",
+    "parent": "root/약국",
+    "name": "평양시"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역",
+    "parent": "root/약국/평양시",
+    "name": "만경대구역"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/보건성 고려약생산관리국 건강약국",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "보건성 고려약생산관리국 건강약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "청춘관, 칠골조선옷점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역",
+    "parent": "root/약국/평양시",
+    "name": "대동강구역"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/만년보건회사 만년약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "만년보건회사 만년약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "류경관, 장생약국"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/평양의료기구기술사 대동강의료품상점",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "평양의료기구기술사 대동강의료품상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대동강구역편의사업소, 은덕원"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역",
+    "parent": "root/약국/평양시",
+    "name": "보통강구역"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/첨단기술제품교류소 붉은거리분소",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "첨단기술제품교류소 붉은거리분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은하대성식료공장, 평양주철관공장"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역",
+    "parent": "root/약국/평양시",
+    "name": "모란봉구역"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/명운약국",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "명운약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "국가과학기술위원회, 진흥초급중학교"
+  },
+  {
+    "id": "root/약국/평양시/중구역",
+    "parent": "root/약국/평양시",
+    "name": "중구역"
+  },
+  {
+    "id": "root/약국/평양시/중구역/조선동방즉효약물제약회사 동방약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "조선동방즉효약물제약회사 동방약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양종합인쇄공장, 평양철도합숙"
+  },
+  {
+    "id": "root/약국/평양시/대성구역",
+    "parent": "root/약국/평양시",
+    "name": "대성구역"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/려명거리새희망상점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "려명거리새희망상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "상원희금속교류소, 려명려관"
+  },
+  {
+    "id": "root/약국/평양시/서성구역",
+    "parent": "root/약국/평양시",
+    "name": "서성구역"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/고려명승제약공장 약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "고려명승제약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장산체육단, 긴재2식료품상점"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/축전경흥상점 의약품매대",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "축전경흥상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "아딸리아특산물식당"
+  },
+  {
+    "id": "root/약국/황해남도",
+    "parent": "root/약국",
+    "name": "황해남도"
+  },
+  {
+    "id": "root/약국/황해남도/강령군",
+    "parent": "root/약국/황해남도",
+    "name": "강령군"
+  },
+  {
+    "id": "root/약국/황해남도/강령군/황해남도 강령군 의약품관리소 분약국",
+    "parent": "root/약국/황해남도/강령군",
+    "name": "황해남도 강령군 의약품관리소 분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "국수집, 계급교양관, 소학교"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역",
+    "parent": "root/약국/평양시",
+    "name": "락랑구역"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/민성상점 의약품매대",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "민성상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "락랑시장, 락랑만방상점"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/금연연구보급소 분소약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "금연연구보급소 분소약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조국해방전쟁승리기념관, 전승상점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/해봉약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "해봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "인민경제대학, 작가동맹중앙위원회"
+  },
+  {
+    "id": "root/약국/남포시",
+    "parent": "root/약국",
+    "name": "남포시"
+  },
+  {
+    "id": "root/약국/남포시/와우도구역",
+    "parent": "root/약국/남포시",
+    "name": "와우도구역"
+  },
+  {
+    "id": "root/약국/남포시/와우도구역/고려약수출입회사 남포약국",
+    "parent": "root/약국/남포시/와우도구역",
+    "name": "고려약수출입회사 남포약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "백화점, 중앙은행 남포시지점, 남포농업대학"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/평양칠봉상점 약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "평양칠봉상점 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대성구역직매점"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/락원학봉약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "락원학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "락원소학교, 락원1동사무소"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/봉화상점 약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "봉화상점 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "과학자려관 앞, 옥류공원 옆"
+  },
+  {
+    "id": "root/약국/평양시/평천구역",
+    "parent": "root/약국/평양시",
+    "name": "평천구역"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평천의료품상점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평천의료품상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "토성약국, 봉남잡화상점"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/만경대창공상점",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "만경대창공상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양시제3인민병원, 만경대소학교"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/청류의원상점 의료품매대",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "청류의원상점 의료품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대동강구역 청소년체육학교 체육관"
+  },
+  {
+    "id": "root/약국/평양시/중구역/련화청옥상점 분점",
+    "parent": "root/약국/평양시/중구역",
+    "name": "련화청옥상점 분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "중구역인민병원, 평양제1려관"
+  },
+  {
+    "id": "root/약국/평안남도",
+    "parent": "root/약국",
+    "name": "평안남도"
+  },
+  {
+    "id": "root/약국/평안남도/운곡군",
+    "parent": "root/약국/평안남도",
+    "name": "운곡군"
+  },
+  {
+    "id": "root/약국/평안남도/운곡군/운곡지구의약품관리소 중흥리약국",
+    "parent": "root/약국/평안남도/운곡군",
+    "name": "운곡지구의약품관리소 중흥리약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "중흥농장청사, 중흥고급중학교"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/서흥상점 대성분점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "서흥상점 대성분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "지하철도《삼흥역》, 료리축전장"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/모란봉정보기술교류소 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "모란봉정보기술교류소 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "개선고급중학교, 개선동사무소"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/유보도상점 의약품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "유보도상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철도성병원, 붉은별연구소"
+  },
+  {
+    "id": "root/약국/평안북도",
+    "parent": "root/약국",
+    "name": "평안북도"
+  },
+  {
+    "id": "root/약국/평안북도/철산군",
+    "parent": "root/약국/평안북도",
+    "name": "철산군"
+  },
+  {
+    "id": "root/약국/평안북도/철산군/철산군의약품관리소 장송분약국",
+    "parent": "root/약국/평안북도/철산군",
+    "name": "철산군의약품관리소 장송분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장송체신소, 장송상점"
+  },
+  {
+    "id": "root/약국/평안북도/철산군/철산군의약품관리소 읍3분약국",
+    "parent": "root/약국/평안북도/철산군",
+    "name": "철산군의약품관리소 읍3분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "어린이교통공원,문화회관"
+  },
+  {
+    "id": "root/약국/평안북도/철산군/철산군의약품관리소 읍1분약국",
+    "parent": "root/약국/평안북도/철산군",
+    "name": "철산군의약품관리소 읍1분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "식료수매종합상점, 철산고급중학교"
+  },
+  {
+    "id": "root/약국/평안북도/철산군/철산군의약품관리소 인민약국",
+    "parent": "root/약국/평안북도/철산군",
+    "name": "철산군의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철산술집,동부상점,탁아유치원물자공급소"
+  },
+  {
+    "id": "root/약국/평안북도/철산군/철산군의약품관리소 읍2분약국",
+    "parent": "root/약국/평안북도/철산군",
+    "name": "철산군의약품관리소 읍2분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "화학공장, 도시건설사업소"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/첨단기술제품교류소 서장분약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "첨단기술제품교류소 서장분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "서장영명상점, 서장배급소"
+  },
+  {
+    "id": "root/약국/황해북도",
+    "parent": "root/약국",
+    "name": "황해북도"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시",
+    "parent": "root/약국/황해북도",
+    "name": "사리원시"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/고려약수출입회사 사리원약국",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "고려약수출입회사 사리원약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "원유장비연구소, 대성소학교"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/삼일포특산물상점 평천분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "삼일포특산물상점 평천분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천구역인민병원, 평천1동진료소"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/관문무역회사 관문상점 약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "관문무역회사 관문상점 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "인민경제대학"
+  },
+  {
+    "id": "root/약국/평양시/중구역/만합상점 중구분점",
+    "parent": "root/약국/평양시/중구역",
+    "name": "만합상점 중구분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철도성, 동안소학교"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역",
+    "parent": "root/약국/평양시",
+    "name": "동대원구역"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/대동강3식당 의약품",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "대동강3식당 의약품",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "주체사상탑, 조선기록영화찰영소"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/림미영애국선내관 상점 의약품매대",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "림미영애국선내관 상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선콤퓨터쎈터, 대성식당"
+  },
+  {
+    "id": "root/약국/평양시/중구역/룡산정보기술교류소 의료품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "룡산정보기술교류소 의료품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "출판검열국,평양종합인쇄공장"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/만년약국 보통강분점",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "만년약국 보통강분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통강해양상점, 류경신발상점"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/룡흥묘향상점 의약품매대",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "룡흥묘향상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "록색건축기술교류사, 종합상업구"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/만합상점 북성분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "만합상점 북성분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "북성2과일남새상점, 꽃계절상점"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/장생약국 전승분약국",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "장생약국 전승분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "신흥정보기술교류사, 김일성종합대학"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/만합상점 락랑분점 약매대",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "만합상점 락랑분점 약매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "하나음악정보쎈터, 통일시장"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/만년합영회사 만합상점 모란봉분점",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "만년합영회사 만합상점 모란봉분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "순화강상점, 려명장산분식당"
+  },
+  {
+    "id": "root/약국/남포시/온천군",
+    "parent": "root/약국/남포시",
+    "name": "온천군"
+  },
+  {
+    "id": "root/약국/남포시/온천군/남포시온천군의약품관리소 인민약국",
+    "parent": "root/약국/남포시/온천군",
+    "name": "남포시온천군의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "군인민병원, 석찬편의"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/남송상점 모란분점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "남송상점 모란분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "모란봉제1중학교, 모란봉청소년체육학교"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/대동강을지봉상점",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "대동강을지봉상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만년약국,  동문국수집"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/통일주봉약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "통일주봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "진성피복회사, 락랑구역체신소"
+  },
+  {
+    "id": "root/약국/남포시/온천군/남포시 온천군의약품관리소 온천약국",
+    "parent": "root/약국/남포시/온천군",
+    "name": "남포시 온천군의약품관리소 온천약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "상업관리소, 전자업무연구소"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시",
+    "parent": "root/약국/평안북도",
+    "name": "신의주시"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/평안북도 수혈소 분약국",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "평안북도 수혈소 분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "신의주길영상점, 신의주지흥상점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/고려약수출입회사 대동강분약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "고려약수출입회사 대동강분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대성피복공장, 옥류초급중학교"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/제약수출입회사 대동강분약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "제약수출입회사 대동강분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "당창건기념탑, 동문국수집"
+  },
+  {
+    "id": "root/약국/황해남도/해주시",
+    "parent": "root/약국/황해남도",
+    "name": "해주시"
+  },
+  {
+    "id": "root/약국/황해남도/해주시/고려약수출입회사 해주약국",
+    "parent": "root/약국/황해남도/해주시",
+    "name": "고려약수출입회사 해주약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "고기상점, 영예군인수지가공공장"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/고려약수출입회사 대성분약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "고려약수출입회사 대성분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "려명거리70층, 대성시장, 연두부식당"
+  },
+  {
+    "id": "root/약국/평양시/중구역/수혈원 중구약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "수혈원 중구약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양제2백화점"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/남송상점 대성분점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "남송상점 대성분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대성천지상점, 강계면옥"
+  },
+  {
+    "id": "root/약국/남포시/온천군/남포시 온천군 의약품관리소 원읍약국",
+    "parent": "root/약국/남포시/온천군",
+    "name": "남포시 온천군 의약품관리소 원읍약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "원읍1상점, 문화회관"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/장생약국 모란분약국",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "장생약국 모란분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "발명총국, 비파시장"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/평양의료기구기술사 동대원의료품상점",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "평양의료기구기술사 동대원의료품상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "문신3과일남새상점, 문수원, 금성정치대학"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/평양은흥상점 의약품매대",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "평양은흥상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "통일거리시장"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/룡흥학봉약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "룡흥학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "려명거리종합상업구, 려명영화관"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/릉라주봉약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "릉라주봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "릉라시장, 릉라종합진료소"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/문흥학봉약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "문흥학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "군의대학, 대동강삼일포특산물상점"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/장생상흥분약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "장생상흥분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "상흥공원,상흥선봉상점"
+  },
+  {
+    "id": "root/약국/평양시/중구역/장명상점 약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "장명상점 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양의학대학병원, 윤이상음악당"
+  },
+  {
+    "id": "root/약국/평안남도/평성시",
+    "parent": "root/약국/평안남도",
+    "name": "평성시"
+  },
+  {
+    "id": "root/약국/평안남도/평성시/평천고려약공장 약국",
+    "parent": "root/약국/평안남도/평성시",
+    "name": "평천고려약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양화장품공장,"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/인흥학봉약국",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "인흥학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "중앙위생방역소, 애국모란피복공장"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/지적제품전시장 의료품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "지적제품전시장 의료품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "국가과학기술위원회, 비파시장"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평천고려약공장 직매점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평천고려약공장 직매점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양베아링공장, 평천시장"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/금산룡흥분약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "금산룡흥분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대성양복점, 룡흥랭동기수리소"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/보통강구역의약품관리소 인민약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "보통강구역의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "류경호텔,건설역"
+  },
+  {
+    "id": "root/약국/평양시/중구역/교구해양약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "교구해양약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "제1목욕탕, 교구탁아소"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/삼일포특산물상점 의약품매대",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "삼일포특산물상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "금옥강냉이제품전시장, 문흥불고기식당"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/사리원학봉약국",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "사리원학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "영광공원, 남원상점"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/선봉상점",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "선봉상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "류경해양상점,보통강국수집"
+  },
+  {
+    "id": "root/약국/함경남도",
+    "parent": "root/약국",
+    "name": "함경남도"
+  },
+  {
+    "id": "root/약국/함경남도/함주군",
+    "parent": "root/약국/함경남도",
+    "name": "함주군"
+  },
+  {
+    "id": "root/약국/함경남도/함주군/함주군 의약품관리소 약국3분점",
+    "parent": "root/약국/함경남도/함주군",
+    "name": "함주군 의약품관리소 약국3분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "함주군 중앙은행, 함주시장"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/신의주학봉상점",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "신의주학봉상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "지흥상점, 길영상점"
+  },
+  {
+    "id": "root/약국/강원도",
+    "parent": "root/약국",
+    "name": "강원도"
+  },
+  {
+    "id": "root/약국/강원도/원산시",
+    "parent": "root/약국/강원도",
+    "name": "원산시"
+  },
+  {
+    "id": "root/약국/강원도/원산시/원산학봉약국",
+    "parent": "root/약국/강원도/원산시",
+    "name": "원산학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "원산의학대학,  원산외국어학원"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/평안북도 신의주시의약품관리소 동중약국",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "평안북도 신의주시의약품관리소 동중약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평안북도 신의주시의약품관리소, 동중2상점"
+  },
+  {
+    "id": "root/약국/평양시/력포구역",
+    "parent": "root/약국/평양시",
+    "name": "력포구역"
+  },
+  {
+    "id": "root/약국/평양시/력포구역/제약수출입회사 장진분약국",
+    "parent": "root/약국/평양시/력포구역",
+    "name": "제약수출입회사 장진분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장진상점, 력포구역고기상점"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평양시의약품관리소 평천분약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평양시의약품관리소 평천분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천혁명사적지,326전선종합공장"
+  },
+  {
+    "id": "root/약국/함경남도/금야군",
+    "parent": "root/약국/함경남도",
+    "name": "금야군"
+  },
+  {
+    "id": "root/약국/함경남도/금야군/함경남도 금야군 의약품관리소 인민약국",
+    "parent": "root/약국/함경남도/금야군",
+    "name": "함경남도 금야군 의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "금야읍종합진료소, 관개관리소"
+  },
+  {
+    "id": "root/약국/자강도",
+    "parent": "root/약국",
+    "name": "자강도"
+  },
+  {
+    "id": "root/약국/자강도/전천군",
+    "parent": "root/약국/자강도",
+    "name": "전천군"
+  },
+  {
+    "id": "root/약국/자강도/전천군/자강도 전천군 의료품교류소",
+    "parent": "root/약국/자강도/전천군",
+    "name": "자강도 전천군 의료품교류소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "전천착암기공장, 전천학원"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/고려약수출입회사 서성분약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "고려약수출입회사 서성분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "중신TV수리,경림상점"
+  },
+  {
+    "id": "root/약국/강원도/판교군",
+    "parent": "root/약국/강원도",
+    "name": "판교군"
+  },
+  {
+    "id": "root/약국/강원도/판교군/판교영예군인 고려약공장 약국",
+    "parent": "root/약국/강원도/판교군",
+    "name": "판교영예군인 고려약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "문화회관, 구호문헌보존교양실"
+  },
+  {
+    "id": "root/약국/평양시/중구역/동행상점 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "동행상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "김책공업종합대학, 천지관"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/평양시 락랑구역의약품관리소 승리분약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "평양시 락랑구역의약품관리소 승리분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "승리일용제품전시장, 승리2공업품상점"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/평안북도 신의주시의약품관리소 남하분약국",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "평안북도 신의주시의약품관리소 남하분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "남하동사무소, 남하과일남새상점"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/제약수출입회사 류경분약국",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "제약수출입회사 류경분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "황해북도사리원시은행, 황해북도지능제품제작소"
+  },
+  {
+    "id": "root/약국/평양시/중구역/중구역의약품관리소 대동교인민약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "중구역의약품관리소 대동교인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대동강호텔, 림업성"
+  },
+  {
+    "id": "root/약국/평안북도/천마군",
+    "parent": "root/약국/평안북도",
+    "name": "천마군"
+  },
+  {
+    "id": "root/약국/평안북도/천마군/평안북도 천마군 조악 2분약국",
+    "parent": "root/약국/평안북도/천마군",
+    "name": "평안북도 천마군 조악 2분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "금골체신분소옆, 정보기술교류소옆"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/건합상점 서성분점",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "건합상점 서성분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장경양복점, 장경리발관, 장경미용원"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/건합상점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "건합상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "진흥건구상점, 평천태승상점"
+  },
+  {
+    "id": "root/약국/평양시/중구역/건합상점 동안분점 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "건합상점 동안분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철도성, 철도성문화회관"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/고려약수출원천사업소 동대원약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "고려약수출원천사업소 동대원약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은덕원, 동신2과일남새상점"
+  },
+  {
+    "id": "root/약국/평양시/중구역/만합상점 서문분점",
+    "parent": "root/약국/평양시/중구역",
+    "name": "만합상점 서문분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통문, 신양식료품상점"
+  },
+  {
+    "id": "root/약국/평양시/중구역/고려약수출입회사 중구약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "고려약수출입회사 중구약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "중구시장, 동안소학교"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/고려약수출입회사 락랑분약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "고려약수출입회사 락랑분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "통일거리영화관.충성체신분소"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/만합상점 월향분점",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "만합상점 월향분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "월향탄공장, 영화문학창작단"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/신리만년분점",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "신리만년분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동대원김치공장, 신리식료품수매상점"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/장생약국 만경대분약국",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "장생약국 만경대분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만경대동사무소, 만경대과일남새상점"
+  },
+  {
+    "id": "root/약국/함경남도/함흥시",
+    "parent": "root/약국/함경남도",
+    "name": "함흥시"
+  },
+  {
+    "id": "root/약국/함경남도/함흥시/고려약수출입회사 함흥약국",
+    "parent": "root/약국/함경남도/함흥시",
+    "name": "고려약수출입회사 함흥약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "삼일시장, 성천강구역체신소"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/장생약국 동대원분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "장생약국 동대원분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선기록영화촬영소,옥류순대국집"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/신포약국",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "신포약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "민포과일남새상점, 신포상점"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/건합상점 안산분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "건합상점 안산분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장철구상업대학.안산종합진료소."
+  },
+  {
+    "id": "root/약국/평양시/서성구역/서성주봉약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "서성주봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장경2동 분주소, 장경국수집"
+  },
+  {
+    "id": "root/약국/평안남도/평성시/고려약수출입회사 평성약국",
+    "parent": "root/약국/평안남도/평성시",
+    "name": "고려약수출입회사 평성약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "옥전제1중학교, 중덕동사무소"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/서성대홍상점 의약품매대",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "서성대홍상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "서평양려관, 중신식료품상점"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/만년약국 동대원분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "만년약국 동대원분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동대원1식료품상점, 동대원고급중학교"
+  },
+  {
+    "id": "root/약국/강원도/철원군",
+    "parent": "root/약국/강원도",
+    "name": "철원군"
+  },
+  {
+    "id": "root/약국/강원도/철원군/철원군 영예군인 고려약공장 약국",
+    "parent": "root/약국/강원도/철원군",
+    "name": "철원군 영예군인 고려약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대릉관리부, 배전부"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/장생약국 서성분약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "장생약국 서성분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "서성시장"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/만년약국 동대원1분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "만년약국 동대원1분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양기계대학 기숙사, 동대원목욕탕"
+  },
+  {
+    "id": "root/약국/평안북도/박천군",
+    "parent": "root/약국/평안북도",
+    "name": "박천군"
+  },
+  {
+    "id": "root/약국/평안북도/박천군/평안북도 박천군의약품관리소 분약국",
+    "parent": "root/약국/평안북도/박천군",
+    "name": "평안북도 박천군의약품관리소 분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "박천군위생방역소, 박천군제1인민병원"
+  },
+  {
+    "id": "root/약국/평안북도/박천군/박천군의약품관리소 맹중리 분약국",
+    "parent": "root/약국/평안북도/박천군",
+    "name": "박천군의약품관리소 맹중리 분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "박천군 맹중리 책방,  박천군 맹중리 공업품상점"
+  },
+  {
+    "id": "root/약국/평안북도/박천군/박천군의약품관리소 인민약국",
+    "parent": "root/약국/평안북도/박천군",
+    "name": "박천군의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "박천군인민병원, 박천군위생방역소, 박천군제약공장"
+  },
+  {
+    "id": "root/약국/함경남도/금야군/함경남도 금야군 의약품관리소 인흥약국2분점",
+    "parent": "root/약국/함경남도/금야군",
+    "name": "함경남도 금야군 의약품관리소 인흥약국2분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "인흥역전, 인흥시장"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/평안북도의약품관리소 신남분약국",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "평안북도의약품관리소 신남분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "신남동사무소, 신남상점"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/구룡산상점 의약품매대",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "구룡산상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양시제2인민병원,"
+  },
+  {
+    "id": "root/약국/평안북도/신의주시/평안북도 신의주시의약품관리소 본부약국",
+    "parent": "root/약국/평안북도/신의주시",
+    "name": "평안북도 신의주시의약품관리소 본부약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "신선초급중학교, 도수출입품감독소"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/건합상점 보통강분점",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "건합상점 보통강분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양제1중학교, 보통강백화점"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/모란봉락원상점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "모란봉락원상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "서평양백화점, 염소불고기식당"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/류경락원상점 평천분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "류경락원상점 평천분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "간성초급중학교옆"
+  },
+  {
+    "id": "root/약국/평양시/형제산구역",
+    "parent": "root/약국/평양시",
+    "name": "형제산구역"
+  },
+  {
+    "id": "root/약국/평양시/형제산구역/형제산고려약공장약국",
+    "parent": "root/약국/평양시/형제산구역",
+    "name": "형제산고려약공장약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보건성2예방원, 하당2배급소"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/봉화산상점 의약품매대",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "봉화산상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "세거리고급중학교 대성은행"
+  },
+  {
+    "id": "root/약국/평양시/선교구역",
+    "parent": "root/약국/평양시",
+    "name": "선교구역"
+  },
+  {
+    "id": "root/약국/평양시/선교구역/장생합작회사 선교분약국",
+    "parent": "root/약국/평양시/선교구역",
+    "name": "장생합작회사 선교분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동평양백화점,선교구역체신소"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/건합상점 대성분점 의약품매대",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "건합상점 대성분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "상원희귀금속개발교류사, 대성동양상점"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/장경분약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "장경분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "김일성종합대학 아빠트밑"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평양록양전시장 의약품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평양록양전시장 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "민성관, 진흥건구상점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/장생약국 본점",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "장생약국 본점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만년약국,동문국수집"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/건합상점 평천분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "건합상점 평천분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천련덕상점, 평천구역건물관리소식당"
+  },
+  {
+    "id": "root/약국/평양시/형제산구역/서포주봉약국",
+    "parent": "root/약국/평양시/형제산구역",
+    "name": "서포주봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "서포소학교, 형제산구역 건물관리소"
+  },
+  {
+    "id": "root/약국/평양시/중구역/련화학봉약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "련화학봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양고려호텔, 흥부건재상점"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/만합상점 성북분점",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "만합상점 성북분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "성북동사무소, 서평양국수집, 보통강수산물상점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/건합상점 청류분점",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "건합상점 청류분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "과학자려관, 대성백화점"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평천구역의약품관리소 륙교1분약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평천구역의약품관리소 륙교1분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천구역위생방역소, 북성역"
+  },
+  {
+    "id": "root/약국/평양시/중구역/장생중구분약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "장생중구분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "윤이상음악당,외교단사업국"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/장생 평천분약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "장생 평천분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양양말공장,평양화장품공장"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/보건성제약수출입회사사리원서리분약국",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "보건성제약수출입회사사리원서리분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "황해북도정보통신국,황해북도도시설계연구소"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/건합상점 흥부분점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "건합상점 흥부분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "건강합작회사, 흥부남새상점"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/의생약국 동대원분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "의생약국 동대원분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선적십자종합병원, 동대원구역 대신소학교"
+  },
+  {
+    "id": "root/약국/평양시/은정구역",
+    "parent": "root/약국/평양시",
+    "name": "은정구역"
+  },
+  {
+    "id": "root/약국/평양시/은정구역/은정주봉약국",
+    "parent": "root/약국/평양시/은정구역",
+    "name": "은정주봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은정고급중학교, 은정구역체신소"
+  },
+  {
+    "id": "root/약국/강원도/원산시/보건성 고려약수출입회사 원산약국",
+    "parent": "root/약국/강원도/원산시",
+    "name": "보건성 고려약수출입회사 원산약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "강원도 원산시주물제품공장,강원도 원산시갈마동사무소"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/황해북도 의약품관리소 상매약국",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "황해북도 의약품관리소 상매약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "황해북도 검찰소, 황해북도 농촌경영위원회 자재상사"
+  },
+  {
+    "id": "root/약국/평양시/중구역/동성해성상점 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "동성해성상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동성신발상점,중구릉라도상점"
+  },
+  {
+    "id": "root/약국/평안남도/순천시",
+    "parent": "root/약국/평안남도",
+    "name": "순천시"
+  },
+  {
+    "id": "root/약국/평안남도/순천시/순천고려약공장직매점",
+    "parent": "root/약국/평안남도/순천시",
+    "name": "순천고려약공장직매점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "순천공업기술대학, 순천시서문소학교"
+  },
+  {
+    "id": "root/약국/평양시/중구역/련화남송상점 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "련화남송상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양의학대학병원, 중구역고기상점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/문수대동문상점 의약품매대",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "문수대동문상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양산원꽃상점,옥류아동병원"
+  },
+  {
+    "id": "root/약국/평양시/중구역/남송상점 동안분점 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "남송상점 동안분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동해식당,전진상점"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/조선진영상업기술교류소 대성진영상점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "조선진영상업기술교류소 대성진영상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "농업최첨단전시장,만년제약공장장"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/미래만룡상점 의약품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "미래만룡상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천광명정보기술교류소, 미래유치원"
+  },
+  {
+    "id": "root/약국/평양시/중구역/중구진영상점",
+    "parent": "root/약국/평양시/중구역",
+    "name": "중구진영상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "김책공업종합대학,외성고급피복공장"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/명오상점 의약품매대",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "명오상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "통일거리영화관,정오상점"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/락랑구역 의약품관리소 관문분약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "락랑구역 의약품관리소 관문분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양면옥, 평양전기기구합영회사"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/민흥창공상점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "민흥창공상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "민흥소학교,문필상점"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/평양시의약품검정소 약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "평양시의약품검정소 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "통일거리고급중학교, 통일거리1동탁아소"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/석암약국 선내분점",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "석암약국 선내분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철령전시장,선내차수리소"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/황금벌묘향상점 의약품매대",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "황금벌묘향상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "황금벌역, 경흥식당"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/정성제약종합공장 보통강약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "정성제약종합공장 보통강약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통강백화점, 락랑금강상점(삼록분점)"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/의원약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "의원약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "의학연구원, 락랑공업품상점"
+  },
+  {
+    "id": "root/약국/남포시/천리마구역",
+    "parent": "root/약국/남포시",
+    "name": "천리마구역"
+  },
+  {
+    "id": "root/약국/남포시/천리마구역/평양철도제약공장 보봉약국",
+    "parent": "root/약국/남포시/천리마구역",
+    "name": "평양철도제약공장 보봉약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "천진시장, 종이공장"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동승동대원상점 약매대",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동승동대원상점 약매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선기록영화촬영소,옥류순대국집"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/동양약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "동양약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "삼흥역, 대성구역인민위원회"
+  },
+  {
+    "id": "root/약국/평안남도/청남구",
+    "parent": "root/약국/평안남도",
+    "name": "청남구"
+  },
+  {
+    "id": "root/약국/평안남도/청남구/청남군의약품관리소 청남약국",
+    "parent": "root/약국/평안남도/청남구",
+    "name": "청남군의약품관리소 청남약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "청북남새과일상점, 청북공업품상점"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/새마을의원상점 의료품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "새마을의원상점 의료품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "종양연구소,방사선연구소"
+  },
+  {
+    "id": "root/약국/평안북도/정주시",
+    "parent": "root/약국/평안북도",
+    "name": "정주시"
+  },
+  {
+    "id": "root/약국/평안북도/정주시/개천철도국의약품관리소 정주분약국",
+    "parent": "root/약국/평안북도/정주시",
+    "name": "개천철도국의약품관리소 정주분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "위생방역소, 영농물자교류소"
+  },
+  {
+    "id": "root/약국/평안남도/순천시/순천시의료품교류소 역전1분약국",
+    "parent": "root/약국/평안남도/순천시",
+    "name": "순천시의료품교류소 역전1분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "순천가구공장, 순천시새덕고급중학교"
+  },
+  {
+    "id": "root/약국/평안남도/순천시/순천시의료품교류소 오사분약국",
+    "parent": "root/약국/평안남도/순천시",
+    "name": "순천시의료품교류소 오사분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "순천석회석광산, 순천세멘트련합기업소, 경로동"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/평양시 대동강구역의약품관리소 동문약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "평양시 대동강구역의약품관리소 동문약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "당창건기념탑-백승아빠트, 자원개발성"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/조선고려약기술사 평천약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "조선고려약기술사 평천약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "해운2과일남새상점. 평양불로크공장"
+  },
+  {
+    "id": "root/약국/함경남도/단천시",
+    "parent": "root/약국/함경남도",
+    "name": "단천시"
+  },
+  {
+    "id": "root/약국/함경남도/단천시/함경남도 단천시 의료품교류소 항구3동분약국",
+    "parent": "root/약국/함경남도/단천시",
+    "name": "함경남도 단천시 의료품교류소 항구3동분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "항구시장, 항구종합편의"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/첨단기술제품교류소 보통강분소",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "첨단기술제품교류소 보통강분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통강만방상점, 보통강류경시장"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/락랑구역의약품관리소 정오1분약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "락랑구역의약품관리소 정오1분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "정오1종합진료소, 정오1수매분점, 락랑마감건제품공장"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/대성고려약공장 약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "대성고려약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "고등교육도서출판사, 대성금흥상점"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/서성약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "서성약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "하신2과일남새상점, 서성피복전시장"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/락랑구역의약품관리소 인민약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "락랑구역의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "정백가정용품상점, 현무문상점, 정백체신소"
+  },
+  {
+    "id": "root/약국/평안남도/안주시",
+    "parent": "root/약국/평안남도",
+    "name": "안주시"
+  },
+  {
+    "id": "root/약국/평안남도/안주시/개천철도국의약품관리소 신안주분약국",
+    "parent": "root/약국/평안남도/안주시",
+    "name": "개천철도국의약품관리소 신안주분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "신안주철도병원, 철도화학공장"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/대동강진영상점 의료품매대",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "대동강진영상점 의료품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "백설릉라식당,릉라시장"
+  },
+  {
+    "id": "root/약국/평안남도/순천시/순천시의약품교류소 석수분약국",
+    "parent": "root/약국/평안남도/순천시",
+    "name": "순천시의약품교류소 석수분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "순천지구탄광련합기업소, 순천시석수수산물상점"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/수혈첨단기술제품교류소 정오약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "수혈첨단기술제품교류소 정오약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "정오1종합진료소, 락랑마감건제품공장"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/락랑구역의약품관리소 원암분약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "락랑구역의약품관리소 원암분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "원암동사무소, 원암지구인민병원"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/서장금흥상점 약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "서장금흥상점 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통강구역당, 보통강구역인민위원회"
+  },
+  {
+    "id": "root/약국/남포시/천리마구역/천리마구역 의약품관리소 새거리분약국",
+    "parent": "root/약국/남포시/천리마구역",
+    "name": "천리마구역 의약품관리소 새거리분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "강선2상점, 새거리중학교,"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/조선고려약기술사 모란약국",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "조선고려약기술사 모란약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "긴마을목욕탕, 긴마을소학교"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/남송식당 의약품매대",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "남송식당 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양산원,고려의학종합병원"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/수혈첨단기술제품교류소 청류분약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "수혈첨단기술제품교류소 청류분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "붉은별상점, 동평양모란상점(뒤)"
+  },
+  {
+    "id": "root/약국/평양시/선교구역/보건성 조선고려약기술사 선교약국",
+    "parent": "root/약국/평양시/선교구역",
+    "name": "보건성 조선고려약기술사 선교약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양방직공장,평방식료상점"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/료원약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "료원약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철도성병원(우측 옆), 날파람상점"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/월향동양상점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "월향동양상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "국가계획위원회, 평양시제1인민병원"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/조선고려약기술사 보통강약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "조선고려약기술사 보통강약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "봉화초급중학교, 봉화동동사무소"
+  },
+  {
+    "id": "root/약국/평양시/중구역/조선고려약기술사 중구약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "조선고려약기술사 중구약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양종합인쇄공장, 출판검열국청사,"
+  },
+  {
+    "id": "root/약국/평양시/중구역/평양시의약품관리소 중구분약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "평양시의약품관리소 중구분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양고서점,옥류욕수"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/륙교창공상점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "륙교창공상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "10월 5일 전기공장앞민성식당뒤출판인쇄대학"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/유아만경대의약품상점",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "유아만경대의약품상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "당상2동사무소, 당상분주소"
+  },
+  {
+    "id": "root/약국/평양시/중구역/금흥약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "금흥약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은정종합봉사소, 아동백화점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/평양시의약품관리소 과학자려관약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "평양시의약품관리소 과학자려관약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "과학자려관, 대성백화점"
+  },
+  {
+    "id": "root/약국/평양시/선교구역/평스강안분약국",
+    "parent": "root/약국/평양시/선교구역",
+    "name": "평스강안분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "선교구역안전부, 규격제정연구소"
+  },
+  {
+    "id": "root/약국/평양시/선교구역/의생선교분약국",
+    "parent": "root/약국/평양시/선교구역",
+    "name": "의생선교분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "선교체육관, 선교구역병원"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/모란봉릉라도상점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "모란봉릉라도상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "월향목욕탕, 월향탄공장"
+  },
+  {
+    "id": "root/약국/평양시/선교구역/명보약국",
+    "parent": "root/약국/평양시/선교구역",
+    "name": "명보약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양제약공장,선교시장"
+  },
+  {
+    "id": "root/약국/황해남도/해주시/해주시의약품교류소장춘약국",
+    "parent": "root/약국/황해남도/해주시",
+    "name": "해주시의약품교류소장춘약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은덕원, 장춘식료상점"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/보건성제약수출입회사 사리원약국",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "보건성제약수출입회사 사리원약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "사리원대성타올공장, 상매남새상점"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/련봉상점약국",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "련봉상점약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "광복역, 광복다리"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/만경대고려약공장 약국",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "만경대고려약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "칠골시장, 갈림길1유치원"
+  },
+  {
+    "id": "root/약국/평안남도/평성시/장수상점 평성분점 장수약국",
+    "parent": "root/약국/평안남도/평성시",
+    "name": "장수상점 평성분점 장수약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평성청년야외극장, 네거리교통초소"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/락랑구역의약품관리소 충성1약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "락랑구역의약품관리소 충성1약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "충성1동사무소, 철도성정양소 정보기술교류실, 충성대흥식당"
+  },
+  {
+    "id": "root/약국/평안남도/안주시/성흥약국",
+    "parent": "root/약국/평안남도/안주시",
+    "name": "성흥약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "남흥사진관, 남흥시장"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/률동약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "률동약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "김형직사범대학, 률동사무소"
+  },
+  {
+    "id": "root/약국/함경남도/함주군/함경남도 의료품교류사 함주읍1분약국",
+    "parent": "root/약국/함경남도/함주군",
+    "name": "함경남도 의료품교류사 함주읍1분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "함주군 미래원,위생방역소"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/대동강구역의약품관리소  청류분약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "대동강구역의약품관리소  청류분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "청류공업품상점,대동강구역 탄공장"
+  },
+  {
+    "id": "root/약국/남포시/천리마구역/평스합영회사 천리마분약국",
+    "parent": "root/약국/남포시/천리마구역",
+    "name": "평스합영회사 천리마분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "천리마은덕원옆, 천리마직매점"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/대성제약공장 약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "대성제약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은별관,  붉은별소학교"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/건합상점 미래분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "건합상점 미래분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "붉은별연구소 뒤, 철도성병원 옆"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동대원고려약공장 동신약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동대원고려약공장 동신약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동대원은하피복공장"
+  },
+  {
+    "id": "root/약국/량강도",
+    "parent": "root/약국",
+    "name": "량강도"
+  },
+  {
+    "id": "root/약국/량강도/삼지연시",
+    "parent": "root/약국/량강도",
+    "name": "삼지연시"
+  },
+  {
+    "id": "root/약국/량강도/삼지연시/삼지연시 의료품교류소 광명성동약국",
+    "parent": "root/약국/량강도/삼지연시",
+    "name": "삼지연시 의료품교류소 광명성동약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "삼지연유치원, 밀림원, 시 교원재교육강습소"
+  },
+  {
+    "id": "root/약국/평안남도/순천시/평안남도 순천시의약품교류소 련포2분약국",
+    "parent": "root/약국/평안남도/순천시",
+    "name": "평안남도 순천시의약품교류소 련포2분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "련포동사무소, 화학건설련합직매점"
+  },
+  {
+    "id": "root/약국/평양시/룡성구역",
+    "parent": "root/약국/평양시",
+    "name": "룡성구역"
+  },
+  {
+    "id": "root/약국/평양시/룡성구역/은하과학자거리약국",
+    "parent": "root/약국/평양시/룡성구역",
+    "name": "은하과학자거리약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은하종합상점, 과학자식당"
+  },
+  {
+    "id": "root/약국/강원도/원산시/강원도 수혈소약국",
+    "parent": "root/약국/강원도/원산시",
+    "name": "강원도 수혈소약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "금강원동기합영공장, 강원도 학원물자 공급소"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평양룡악산판매소 의료품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평양룡악산판매소 의료품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천시장 옆문"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/만경대영예군인수출품고려약공장 약국",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "만경대영예군인수출품고려약공장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만경대구역병원, 만경대구역보위부"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/서성구역의약품관리소 장경분약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "서성구역의약품관리소 장경분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "장경소학교 련못관"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/보건성제약공업관리국 종합약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "보건성제약공업관리국 종합약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "지하철도《황금벌역》 무궤도, 《개선문-황금벌》주차장"
+  },
+  {
+    "id": "root/약국/평안남도/평성시/평안남도 의약품검정소 약국",
+    "parent": "root/약국/평안남도/평성시",
+    "name": "평안남도 의약품검정소 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평성사범대학 평성시 종합병원"
+  },
+  {
+    "id": "root/약국/황해남도/은률군",
+    "parent": "root/약국/황해남도",
+    "name": "은률군"
+  },
+  {
+    "id": "root/약국/황해남도/은률군/은률군의약품관리소 분약국",
+    "parent": "root/약국/황해남도/은률군",
+    "name": "은률군의약품관리소 분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은률려관, 중앙은행은률지점"
+  },
+  {
+    "id": "root/약국/황해북도/사리원시/첨단기술제품교류소 사리원분소",
+    "parent": "root/약국/황해북도/사리원시",
+    "name": "첨단기술제품교류소 사리원분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "경암제1중학교, 대성종합진료소"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/두만강상점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "두만강상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "개선내포국집, 칠성각"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/대성산성상점 룡흥분점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "대성산성상점 룡흥분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "룡흥1동사무소"
+  },
+  {
+    "id": "root/약국/평안남도/평성시/평성의학기술교류소 약국",
+    "parent": "root/약국/평안남도/평성시",
+    "name": "평성의학기술교류소 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평성시이동통신관리국, 양지유치원"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/대성수출품전시장 약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "대성수출품전시장 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "강흥락원관, 국새상점"
+  },
+  {
+    "id": "root/약국/황해남도/벽성군",
+    "parent": "root/약국/황해남도",
+    "name": "벽성군"
+  },
+  {
+    "id": "root/약국/황해남도/벽성군/벽성군의약품관리소 인민약국",
+    "parent": "root/약국/황해남도/벽성군",
+    "name": "벽성군의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "벽성군직매점, 벽성군미래원"
+  },
+  {
+    "id": "root/약국/황해남도/재령군",
+    "parent": "root/약국/황해남도",
+    "name": "재령군"
+  },
+  {
+    "id": "root/약국/황해남도/재령군/황해남도 재령군 의약품관리소",
+    "parent": "root/약국/황해남도/재령군",
+    "name": "황해남도 재령군 의약품관리소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "재령군 시장, 재령군병원"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/첨단생물공학기술교류사 옥류분점",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "첨단생물공학기술교류사 옥류분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양경제기술대학 류경관"
+  },
+  {
+    "id": "root/약국/평양시/중구역/첨단생물공학기술교류사 외성분점",
+    "parent": "root/약국/평양시/중구역",
+    "name": "첨단생물공학기술교류사 외성분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양맥주공장, 평양맥주집"
+  },
+  {
+    "id": "root/약국/황해남도/해주시/황해남도 의약품관리소 양사분약국",
+    "parent": "root/약국/황해남도/해주시",
+    "name": "황해남도 의약품관리소 양사분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "황해남도 미술전람관, 황해남도 해주시 손전화봉사소"
+  },
+  {
+    "id": "root/약국/평양시/중구역/금흥련화상점 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "금흥련화상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "윤이상음악당, 민족식당 맞은켠, 련화TV수리소옆."
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/보통강백화점 의약품매대",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "보통강백화점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "국제통신국, 조선중앙통신사"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/비파상점 의약품매대",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "비파상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "비파공원 비파식료품상점"
+  },
+  {
+    "id": "root/약국/황해남도/안악군",
+    "parent": "root/약국/황해남도",
+    "name": "안악군"
+  },
+  {
+    "id": "root/약국/황해남도/안악군/안악군의약품관리소 안악분약국",
+    "parent": "root/약국/황해남도/안악군",
+    "name": "안악군의약품관리소 안악분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "인민위원회 앞, 청년동맹위원 옆,"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동대원구역의약품관리소 랭천1약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동대원구역의약품관리소 랭천1약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동대원영예군인인쇄공장, 평양미술대학"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/보통강밀림약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "보통강밀림약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조국해방전쟁승리기념탑, 밀림상점."
+  },
+  {
+    "id": "root/약국/평양시/선교구역/선교고려약공장약국",
+    "parent": "root/약국/평양시/선교구역",
+    "name": "선교고려약공장약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "선교공원, 선교영화관"
+  },
+  {
+    "id": "root/약국/평양시/중구역/첨단기술제품교류소  동성분약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "첨단기술제품교류소  동성분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "창광천연색사진관, 동성리발관"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/모란봉대보경제기술정보교류소",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "모란봉대보경제기술정보교류소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "서평양백화점, 목란비데오상점"
+  },
+  {
+    "id": "root/약국/자강도/강계시",
+    "parent": "root/약국/자강도",
+    "name": "강계시"
+  },
+  {
+    "id": "root/약국/자강도/강계시/강계시의약품교류소 북문약국",
+    "parent": "root/약국/자강도/강계시",
+    "name": "강계시의약품교류소 북문약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "도인민위원회옆, 강계시북문동사무소옆"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동대원구역의약품관리소 랭천2약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동대원구역의약품관리소 랭천2약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선체육대학평양시축구학교"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/인흥분약국",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "인흥분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "봉화산려관, 칠성각"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/만년약국 평천분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "만년약국 평천분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "창광상점, 아리랑기재판매소"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/려명거리꽃망울상점 의약품매대",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "려명거리꽃망울상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "려명동사무소룡북원"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/보건성 금연연구보급소 본소약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "보건성 금연연구보급소 본소약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "초밥식당뒤"
+  },
+  {
+    "id": "root/약국/황해남도/삼천군",
+    "parent": "root/약국/황해남도",
+    "name": "삼천군"
+  },
+  {
+    "id": "root/약국/황해남도/삼천군/황해남도 삼천군 의약품관리소",
+    "parent": "root/약국/황해남도/삼천군",
+    "name": "황해남도 삼천군 의약품관리소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "량정사업소, 영화보급소"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/강봉건강식품기술교류소 만경대분점",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "강봉건강식품기술교류소 만경대분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "칠골시장, 칠골민속관"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/유아승리상점 의약품매대",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "유아승리상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "유아제약공장, 승리동태양상 뒤"
+  },
+  {
+    "id": "root/약국/강원도/원산시/원산의료기술교류소 봉수약국",
+    "parent": "root/약국/강원도/원산시",
+    "name": "원산의료기술교류소 봉수약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "강원도 원산학생소년회관, 강원도 원산나팔산영화관강원도 의약품관리소"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/서성구역의약품관리소 하신분약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "서성구역의약품관리소 하신분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "하신국수공장 하신경림상점"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/평스문수분약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "평스문수분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양시구급병원, 문수2리발미용"
+  },
+  {
+    "id": "root/약국/평양시/중구역/중구역의약품관리소 창전분약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "중구역의약품관리소 창전분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "금성제2중학교 종로꽃방"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동대원구역의약품관리소 대신분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동대원구역의약품관리소 대신분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선적십자종합병원, 보건성 수혈원"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/장수상점 평천분점",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "장수상점 평천분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평천릉라도상점"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/장경선원상점 의약품매대",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "장경선원상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "종합대학교육자살림집아빠트전우역"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/장경선원상점 룡흥분점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "장경선원상점 룡흥분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "붉은별역 지하철도운영국"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/유아대성의약품상점",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "유아대성의약품상점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "붉은별역 청소년체육부"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/대성해양상점 의약품매대",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "대성해양상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "붉은별역, 대성시장"
+  },
+  {
+    "id": "root/약국/남포시/천리마구역/첨단제품기술교류소 남포분소",
+    "parent": "root/약국/남포시/천리마구역",
+    "name": "첨단제품기술교류소 남포분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "출판물보급소, 책방원정식당"
+  },
+  {
+    "id": "root/약국/평양시/대성구역/대성구역의약품관리소 미암분약국",
+    "parent": "root/약국/평양시/대성구역",
+    "name": "대성구역의약품관리소 미암분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "유향림소학교, 려명거리화학세탁소"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/보통강종합약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "보통강종합약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "건국역, 붉은거리온반집"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/료원약국(미래)",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "료원약국(미래)",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철도성병원 장미원"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/설봉관 약국",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "설봉관 약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "통일발전은행, 텔레비죤민족료리경연식당"
+  },
+  {
+    "id": "root/약국/평양시/서성구역/서성구역의약품관리소 상신약국",
+    "parent": "root/약국/평양시/서성구역",
+    "name": "서성구역의약품관리소 상신약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "혁신역, 상신공업품상점"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동대원구역 의약품관리소 삼마2약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동대원구역 의약품관리소 삼마2약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "김형직사범대학, 삼마청량음료"
+  },
+  {
+    "id": "root/약국/평양시/모란봉구역/장수상점 북새분점",
+    "parent": "root/약국/평양시/모란봉구역",
+    "name": "장수상점 북새분점",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "모란봉체육관, 북새원"
+  },
+  {
+    "id": "root/약국/평양시/락랑구역/락랑구역의약품관리소 승리3약국",
+    "parent": "root/약국/평양시/락랑구역",
+    "name": "락랑구역의약품관리소 승리3약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "승리3탁아소, 승리3유치원"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/대동강구역의약품관리소 릉라분약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "대동강구역의약품관리소 릉라분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대동강구역병원, 교통8지구대"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/문신분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "문신분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동대원구역병원, 해양관"
+  },
+  {
+    "id": "root/약국/강원도/원산시/정성제약종합공장 원산약국",
+    "parent": "root/약국/강원도/원산시",
+    "name": "정성제약종합공장 원산약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "강원도 출입국 사업처, 고산특산물식당, 원산소학교, 해방식당"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평스합영회사 평천분약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평스합영회사 평천분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "봉남국수집 봉남사진관"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/동대원의약품관리소 동신분약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "동대원의약품관리소 동신분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "기계공업성, 동대원구역 배전부"
+  },
+  {
+    "id": "root/약국/강원도/원산시/보건성 강원도 수혈소 봉춘약국",
+    "parent": "root/약국/강원도/원산시",
+    "name": "보건성 강원도 수혈소 봉춘약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "원산시상수도사업소, 봉춘유치원, 도수산관리국"
+  },
+  {
+    "id": "root/약국/황해남도/배천군",
+    "parent": "root/약국/황해남도",
+    "name": "배천군"
+  },
+  {
+    "id": "root/약국/황해남도/배천군/황해남도 배천군 의약품관리소 인민약국",
+    "parent": "root/약국/황해남도/배천군",
+    "name": "황해남도 배천군 의약품관리소 인민약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "배천군체신소, 백화점"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/남송상점 평천분점 의약품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "남송상점 평천분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "종양연구소, 어린이식료공장"
+  },
+  {
+    "id": "root/약국/평양시/대동강구역/대동강꽃상점약국",
+    "parent": "root/약국/평양시/대동강구역",
+    "name": "대동강꽃상점약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "대성백화점. 금옥강냉이전시장"
+  },
+  {
+    "id": "root/약국/평안북도/염주군",
+    "parent": "root/약국/평안북도",
+    "name": "염주군"
+  },
+  {
+    "id": "root/약국/평안북도/염주군/평안북도 염주군의료품교류소 인광리약국",
+    "parent": "root/약국/평안북도/염주군",
+    "name": "평안북도 염주군의료품교류소 인광리약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평안북도 염주군인광리관리위원회인광리 탁아소"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/평양예방약공장약국",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "평양예방약공장약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양예방약공장, 평양시 제2예방원"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/첨단기술제품교류소 해운분약국",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "첨단기술제품교류소 해운분약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "신흥관, 김정숙평양제사공장"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/남송상점 보통강분점 의약품매대",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "남송상점 보통강분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "태권도학원 울림관"
+  },
+  {
+    "id": "root/약국/평양시/만경대구역/장수상점 만경대분점 의약품매대",
+    "parent": "root/약국/평양시/만경대구역",
+    "name": "장수상점 만경대분점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만경대관광기념품상점, 국가관광총국"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/태성상점 의약품매대",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "태성상점 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "국제통신국뒤, 채취성"
+  },
+  {
+    "id": "root/약국/평양시/평천구역/평천만룡기술교류소 의약품매대",
+    "parent": "root/약국/평양시/평천구역",
+    "name": "평천만룡기술교류소 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "새마을소학교 옆평천련덕상점"
+  },
+  {
+    "id": "root/약국/평양시/동대원구역/보건성 수혈첨단제품기술교류소 수혈원약국",
+    "parent": "root/약국/평양시/동대원구역",
+    "name": "보건성 수혈첨단제품기술교류소 수혈원약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보건성 수혈원"
+  },
+  {
+    "id": "root/약국/평양시/보통강구역/보통강의료품전시장",
+    "parent": "root/약국/평양시/보통강구역",
+    "name": "보통강의료품전시장",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통강고려항공상점 옆"
+  },
+  {
+    "id": "root/약국/평양시/중구역/대명약국",
+    "parent": "root/약국/평양시/중구역",
+    "name": "대명약국",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "천리마문화회관  평양의학대학 민족식당"
+  },
+  {
+    "id": "root/약국/황해남도/해주시/보건성 금연연구보급소 해주분소",
+    "parent": "root/약국/황해남도/해주시",
+    "name": "보건성 금연연구보급소 해주분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "은정차집.양사동사무소"
+  },
+  {
+    "id": "root/약국/평양시/중구역/국가항공총국 동안종합봉사소 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "국가항공총국 동안종합봉사소 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동안소학교 철도성"
+  },
+  {
+    "id": "root/약국/평양시/중구역/대보산전시장 의약품매대",
+    "parent": "root/약국/평양시/중구역",
+    "name": "대보산전시장 의약품매대",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "김책공업종합대학 나래정보기술교류사"
+  },
+  {
+    "id": "root/병원",
+    "parent": "root",
+    "name": "병원"
+  },
+  {
+    "id": "root/병원/평양시",
+    "parent": "root/병원",
+    "name": "평양시"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역",
+    "parent": "root/병원/평양시",
+    "name": "동대원구역"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역/동대원구역3예방원",
+    "parent": "root/병원/평양시/동대원구역",
+    "name": "동대원구역3예방원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "문신1동사무소"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역/동대원구역병원",
+    "parent": "root/병원/평양시/동대원구역",
+    "name": "동대원구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "문신소학교"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역/고려의학종합병원 분원",
+    "parent": "root/병원/평양시/동대원구역",
+    "name": "고려의학종합병원 분원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보건성수혈원"
+  },
+  {
+    "id": "root/병원/평양시/대성구역",
+    "parent": "root/병원/평양시",
+    "name": "대성구역"
+  },
+  {
+    "id": "root/병원/평양시/대성구역/대성구역치과분원",
+    "parent": "root/병원/평양시/대성구역",
+    "name": "대성구역치과분원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "룡흥1공업품상점"
+  },
+  {
+    "id": "root/병원/평양시/대성구역/대성구역병원",
+    "parent": "root/병원/평양시/대성구역",
+    "name": "대성구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "제일정보기술합영회사"
+  },
+  {
+    "id": "root/병원/평양시/락랑구역",
+    "parent": "root/병원/평양시",
+    "name": "락랑구역"
+  },
+  {
+    "id": "root/병원/평양시/락랑구역/락랑구역병원",
+    "parent": "root/병원/평양시/락랑구역",
+    "name": "락랑구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "손전화기보험회사, 만물상상점"
+  },
+  {
+    "id": "root/병원/평양시/만경대구역",
+    "parent": "root/병원/평양시",
+    "name": "만경대구역"
+  },
+  {
+    "id": "root/병원/평양시/만경대구역/만경대구역병원",
+    "parent": "root/병원/평양시/만경대구역",
+    "name": "만경대구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만경대영예군인제약공장"
+  },
+  {
+    "id": "root/병원/평양시/모란봉구역",
+    "parent": "root/병원/평양시",
+    "name": "모란봉구역"
+  },
+  {
+    "id": "root/병원/평양시/모란봉구역/모란봉구역병원",
+    "parent": "root/병원/평양시/모란봉구역",
+    "name": "모란봉구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "모란식료공장"
+  },
+  {
+    "id": "root/병원/평양시/모란봉구역/모란봉구역병원 치과분원",
+    "parent": "root/병원/평양시/모란봉구역",
+    "name": "모란봉구역병원 치과분원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "모란봉피복제작소 개선분점"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역/보건성수혈원",
+    "parent": "root/병원/평양시/동대원구역",
+    "name": "보건성수혈원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "조선적십자종합병원"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역/보건성피부예방원",
+    "parent": "root/병원/평양시/동대원구역",
+    "name": "보건성피부예방원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양신발공장"
+  },
+  {
+    "id": "root/병원/평양시/보통강구역",
+    "parent": "root/병원/평양시",
+    "name": "보통강구역"
+  },
+  {
+    "id": "root/병원/평양시/보통강구역/보통강구역병원",
+    "parent": "root/병원/평양시/보통강구역",
+    "name": "보통강구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "보통강 남새가공품상점"
+  },
+  {
+    "id": "root/병원/평양시/서성구역",
+    "parent": "root/병원/평양시",
+    "name": "서성구역"
+  },
+  {
+    "id": "root/병원/평양시/서성구역/서성구역병원",
+    "parent": "root/병원/평양시/서성구역",
+    "name": "서성구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "상흥선봉상점"
+  },
+  {
+    "id": "root/병원/평양시/선교구역",
+    "parent": "root/병원/평양시",
+    "name": "선교구역"
+  },
+  {
+    "id": "root/병원/평양시/선교구역/선교구역병원",
+    "parent": "root/병원/평양시/선교구역",
+    "name": "선교구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "선교양복점"
+  },
+  {
+    "id": "root/병원/평양시/중구역",
+    "parent": "root/병원/평양시",
+    "name": "중구역"
+  },
+  {
+    "id": "root/병원/평양시/중구역/중구역병원",
+    "parent": "root/병원/평양시/중구역",
+    "name": "중구역병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "평양의학대학, 련화2동사무소"
+  },
+  {
+    "id": "root/병원/평양시/사동구역",
+    "parent": "root/병원/평양시",
+    "name": "사동구역"
+  },
+  {
+    "id": "root/병원/평양시/사동구역/중앙위생방역소 전염병예방원",
+    "parent": "root/병원/평양시/사동구역",
+    "name": "중앙위생방역소 전염병예방원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "사동꽃상점"
+  },
+  {
+    "id": "root/병원/평양시/만경대구역/평양시제3종합병원",
+    "parent": "root/병원/평양시/만경대구역",
+    "name": "평양시제3종합병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "만경대창공상점, 만경대소학교"
+  },
+  {
+    "id": "root/병원/평양시/대성구역/평양시제2종합병원",
+    "parent": "root/병원/평양시/대성구역",
+    "name": "평양시제2종합병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "붉은별역, 농업기술제품전시장"
+  },
+  {
+    "id": "root/병원/평양시/만경대구역/평양시2예방원",
+    "parent": "root/병원/평양시/만경대구역",
+    "name": "평양시2예방원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "선새새별상점"
+  },
+  {
+    "id": "root/병원/평양시/보통강구역/평양시고려병원",
+    "parent": "root/병원/평양시/보통강구역",
+    "name": "평양시고려병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "도시시설관리소"
+  },
+  {
+    "id": "root/병원/평양시/대동강구역",
+    "parent": "root/병원/평양시",
+    "name": "대동강구역"
+  },
+  {
+    "id": "root/병원/평양시/대동강구역/평양시구급병원",
+    "parent": "root/병원/평양시/대동강구역",
+    "name": "평양시구급병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "문수2과일남새상점"
+  },
+  {
+    "id": "root/병원/평양시/만경대구역/보건성 제3예방원",
+    "parent": "root/병원/평양시/만경대구역",
+    "name": "보건성 제3예방원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "선내1식당"
+  },
+  {
+    "id": "root/병원/평양시/동대원구역/평양시치과병원",
+    "parent": "root/병원/평양시/동대원구역",
+    "name": "평양시치과병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "동대원구역 화초사업소"
+  },
+  {
+    "id": "root/병원/평양시/평천구역",
+    "parent": "root/병원/평양시",
+    "name": "평천구역"
+  },
+  {
+    "id": "root/병원/평양시/평천구역/평양철도국병원",
+    "parent": "root/병원/평양시/평천구역",
+    "name": "평양철도국병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "철도미술창작사정보기술교류실"
+  },
+  {
+    "id": "root/병원/평양시/락랑구역/평양안과병원",
+    "parent": "root/병원/평양시/락랑구역",
+    "name": "평양안과병원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": "락랑관"
+  },
+  {
+    "id": "root/제약공장",
+    "parent": "root",
+    "name": "제약공장"
+  },
+  {
+    "id": "root/제약공장/평양시",
+    "parent": "root/제약공장",
+    "name": "평양시"
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역",
+    "parent": "root/제약공장/평양시",
+    "name": "만경대구역"
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/룡흥제약공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "룡흥제약공장",
+    "value": 1,
+    "description": "룡흥제약공장은 2003년 12월 24일에 창립된 때로부터 현재까지 우리 인민들의 건강증진을 위한 수많은 대중약품, 상비약품을 비롯한 효능높은 의약품들을 생산보장하고있습니다.\n 공장에서는 품질보장을 첫째가는 자리에 놓고 생산공정의 무균무진화를 실현하여 알약, 교갑약, 주사약, 가루약, 싸락약, 둥근알약, 약엿, 눈약, 외용약생산공정들에 대한 의약품GMP인증을 획득하였으며 경영활동의 정보화를 실현하고 생산과 경영활동을 철저히 과학기술에 의거하여 진행하고있습니다.\n 고려인삼활성알약, 은조롱고지혈교갑약, 푸르-알리나민알약과 주사약, 인삼간효소낮춤교갑약 등 공장이 개발생산하고있는 특허제품들과 수십여종의 주사약, 알약을 비롯한 상비약품들은 치료효과가 좋은것으로 알려져있습니다.\n 우리는 앞으로도 우리 당의 숭고한 보건정책을 관철하는 길에서 인민들의 목소리에 귀를 기울이고 인민들의 건강을 위하여 멸사복무하는 명실공히 인민을 위한 공장으로 되도록 하기 위하여 모든것을 다바쳐 나갈것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대성구역",
+    "parent": "root/제약공장/평양시",
+    "name": "대성구역"
+  },
+  {
+    "id": "root/제약공장/평양시/대성구역/만년제약공장",
+    "parent": "root/제약공장/평양시/대성구역",
+    "name": "만년제약공장",
+    "value": 1,
+    "description": "만년제약공장에서는 위생안전성이 철저히 보장된 질좋고 효능이 높은 안궁우황환,륙미환, 팔미환, 십전대보환, 귀비환 등 인민들의 호평을 받는 여러가지 전통적인 고려약들과 특허제품들인 비타민B17주사약, 황금아연기관지염교갑약, 히메크로몬알약을 비롯한 의약품들을 생산하고 있습니다.\nGMP인증\n①주사약생산공정\n②알약생산공정\n③환제생산공정\n④가루약생산공정\n⑤고제생산공정\n⑥차생산공정\n⑦물약생산공정",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/평양예방약공장 선호제약소",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "평양예방약공장 선호제약소",
+    "value": 1,
+    "description": "평양예방약공장 선호제약소는 조선민주주의인민공화국 의약품생산 및 품질관리(GMP)인증을 받은 제약생산공정을 갖추고 우리 인민들이 선호하는 효능높은 의약품들을 생산보장하고 있습니다. \n 공장에서는 의약품의 품질보장을 첫자리에 놓고 전통의학리론과 현대제약기술에 기초한 생물약품제제들과 천연의약품들을 생산하고 있습니다.\n 생물원자극소주사약, 플루아민주사약, 주사용 아스피린, 우비키논주사약 등 현대과학기술로 제조한 십여종의 주사약과 조선서해 광량만의 천연류황감탕을 최신나노기술로 제조한 류황감탕외용약품들, 활동성간염과 지방간 치료에서 뚜렷한 효능을 나타내는 메셀청담약을 비롯하여 많은 의약품들을 생산보장하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/복명제약공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "복명제약공장",
+    "value": 1,
+    "description": "우리 복명제약공장에서는 아미노당계렬의 의약품인 《천연아미노당복합주사약(복명-1)》(국규 34892:2012, 특허 1008568), 《N-아세틸글루코자민주사약(복명-2)》(국규 35821:2021, 특허 75743), 《복명국소지혈물약》(국규 34932:2013, 특허 72422), 《N-아세틸글루코자민외용물약》(국규35577:2019, 특허 73342)을 생산합니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/중구역",
+    "parent": "root/제약공장/평양시",
+    "name": "중구역"
+  },
+  {
+    "id": "root/제약공장/평양시/중구역/고려칠보제약소",
+    "parent": "root/제약공장/평양시/중구역",
+    "name": "고려칠보제약소",
+    "value": 1,
+    "description": "평양의학대학 고려칠보제약소는 조선민주주의인민공화국 의약품생산 및 품질관리(GMP)인증을 받은 현대적인 제약생산공정을 갖추었으며 우리 선조들의 전통의학리론과 방법에 기초하여 천연약재들을 현대제약기술로 조화롭게 추출하여 제조하는 고려의약품연구 및 생산판매단위입니다.\n 고려칠보제약소에서는 생산안전성이 철저히 담보된 효능높은 의약품들과 건강식품, 각종 의료용품들을 생산하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대동강구역",
+    "parent": "root/제약공장/평양시",
+    "name": "대동강구역"
+  },
+  {
+    "id": "root/제약공장/평양시/대동강구역/동평양모란기술교류사 의료품생산소",
+    "parent": "root/제약공장/평양시/대동강구역",
+    "name": "동평양모란기술교류사 의료품생산소",
+    "value": 1,
+    "description": "동평양모란기술교류사 의료품생산소에서는 수천년 전해져내려온 고려침구원리에 최신과학기술성과들을 결합시킨 최첨단수준의 효능높은 천연활성제품들을 생산하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/락랑구역",
+    "parent": "root/제약공장/평양시",
+    "name": "락랑구역"
+  },
+  {
+    "id": "root/제약공장/평양시/락랑구역/의학생물학연구소",
+    "parent": "root/제약공장/평양시/락랑구역",
+    "name": "의학생물학연구소",
+    "value": 1,
+    "description": "위대한 수령 동지의 직접적인 발기에 의하여 주체57 (1968)년 3월 26일 창립된 의학생물학연구소는 생물공학적방법으로 비루스성질병의 진단 예방 치료를 위한 연구를 기본으로 하는 의학생물공학연구기지입니다.\n A, B, C, D형 간염진단시약 및 예방약생산에서 국내수요를 보장하고있으며 유전자공학 세포공학기술 나노기술 줄기세포기술 등에서 국내패권을 쥐고있습니다.\n GMP인증을 받은 현대적인 중간공장을 가지고있는 연구소는 실력있는 두뇌전과 훌륭한 공정에 기초하여 세계로 힘차게 전진하며 우리와의 공동연구 합영합작제안들을 언제나 환영하고 그의 실현을 위해 최선을 다할것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/평천구역",
+    "parent": "root/제약공장/평양시",
+    "name": "평천구역"
+  },
+  {
+    "id": "root/제약공장/평양시/평천구역/철도성의학기술교류소",
+    "parent": "root/제약공장/평양시/평천구역",
+    "name": "철도성의학기술교류소",
+    "value": 1,
+    "description": "조선의학협회 철도성위원회 철도성의학기술교류소에는  첨단의료기구와 효능높은 고려약들을 생산하는 미래의료기구생산소와 미래제약소가 있습니다.\n 미래의료기구생산소에서는 세계적 으로는 물론 국내에서도 첨단치료기술로 공인되고 있는 편광치료기와 생물공진치료기, 음이온제품들을 생산하고 있으며 미래제약소에서는 소화기계통과 면역계통에 긍정적인 생리적작용을 나타내는 비피두스균을 활성화시켜 만든 비피두스효모가루약, 송-B-다당체주사약을 비롯한 효능높은 천연약품들을 생산하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/함경남도",
+    "parent": "root/제약공장",
+    "name": "함경남도"
+  },
+  {
+    "id": "root/제약공장/함경남도/함흥시",
+    "parent": "root/제약공장/함경남도",
+    "name": "함흥시"
+  },
+  {
+    "id": "root/제약공장/함경남도/함흥시/새거리제약공장",
+    "parent": "root/제약공장/함경남도/함흥시",
+    "name": "새거리제약공장",
+    "value": 1,
+    "description": "의학연구원 합성제약연구소는 새 약품의 개발과 공업화를 전문으로 연구하는 합성의약품연구단위로서 지난 60여년간 필수약품과 상비약, 대중약품을 비롯한 80여종의 의약품의 공업화를 실현하고 교수, 박사를 비롯한 100여명의 학위학직소유자를 배출한 관록있는  전문의약품합성연구기관입니다.\n연구소에서는 의약품연구와 함께 구급소생약과 마취약, 항암약을 비롯한 20여종의 필수약품과 부테나핀무좀약을 비롯한 10여종의 대중약품을 생산, 판매하고있으며 여러 림상단위에서개발연구도 진행하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/라선시",
+    "parent": "root/제약공장",
+    "name": "라선시"
+  },
+  {
+    "id": "root/제약공장/라선시/관곡동",
+    "parent": "root/제약공장/라선시",
+    "name": "관곡동"
+  },
+  {
+    "id": "root/제약공장/라선시/관곡동/라선령선종합가공공장",
+    "parent": "root/제약공장/라선시/관곡동",
+    "name": "라선령선종합가공공장",
+    "value": 1,
+    "description": "라선령선종합가공공장은 주체95 (2006)년 4월 21일에 창립된 때로부터 현재까지 각종 식료품(두만강맥주, 즉석국수,등), 피복제품, 의료용마스크를 비롯한 여러가지 제품을 생산하여 인민생활향상에 이바지하고 있습니다.\n공장은 품질을 제일중시하는것을 일관하게 밀고나감으로서 인민들이 선호하는 공장, 인민들이 선호하는 제품을 생산하기위하여 모든것을 다바쳐 나갈것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/락랑구역/락랑수성제약공장",
+    "parent": "root/제약공장/평양시/락랑구역",
+    "name": "락랑수성제약공장",
+    "value": 1,
+    "description": "첨단기술에 의한 효능높은 의약품생산을 사명으로 하고있는 락랑수성제약공장은 주체104(2015)년 에 설립되였습니다.\n락랑수성제약공장에서는 자체의 제품개발능력와 조선민주주의인민공화국의약품생산 및 품질관리기준(GMP)인증을 받은 현대적인 생산공정을 가지고 우리 나라의 천연약재들로 수십여가지의 효능높은 약품들을 생산하고 있습니다.\n보르스콘뇌심주사약을 비롯한 조선민주주의인민공화국 특허를 받은 의약품들과 안궁우황환, 뇌심사향 등은 사용자들의 커다란 호평속에 인민들의 건강증진에 적극 이바지 하고있습니다.\n공장은 사람들의 건강증진에 이바지하는 첨단약물의 개발을 다그치고있으며 다른 나라 의약품생산기업들과의 다양한 기술교류와 협력을 통하여 약물제조분야에서 세계를 향한 보다 큰 걸음을 내디디려고 합니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/자강도천연건강제품생산사업소",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "자강도천연건강제품생산사업소",
+    "value": 1,
+    "description": "자강도천연건강제품생산사업소에서는 각종 약초원료들에 대한 주문송달봉사를 진행하고있습니다",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/량강도",
+    "parent": "root/제약공장",
+    "name": "량강도"
+  },
+  {
+    "id": "root/제약공장/량강도/삼지연시",
+    "parent": "root/제약공장/량강도",
+    "name": "삼지연시"
+  },
+  {
+    "id": "root/제약공장/량강도/삼지연시/대흥건강식품생산소",
+    "parent": "root/제약공장/량강도/삼지연시",
+    "name": "대흥건강식품생산소",
+    "value": 1,
+    "description": "대흥건강식품생산소에서는 핵산, 단백질, 아미노산, 펩티드, 각종 비타민, 광물질 및 미량원소 등이 리상적으로 조화되여 생리활성을 발휘하는 독특한 기능성식품들을 연구, 개발, 생산하고 있습니다.\n건강과 안전성이 확고히 담보되는 제품이 소비자들에게 공급되도록 원료공급에서부터 완제품포장에 이르는 전공정을 무균화하고 있으며 품질검사와 품질관리에서 철저한 체계를 확립하여 각종 제품들을 생산하고 있습니다. 대흥건강식품생산소에서 생산하고 있는 영양단졸임은 난치성장애를 일으키고 로화를 촉진시키는 로페물을 제거함으로써 청춘의 활기를 더해주고 피부미용과 체력증강, 두뇌발달, 시력개선 등에 특별한 효능을 나타내며 신경통과 동맥경화로 인한 어지럼증, 온몸아픔, 간기능장애, 결핵 등의 치료에 큰 도움을 주는 특이한 기능성식품입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/평천구역/금강산특산물생산사업소",
+    "parent": "root/제약공장/평양시/평천구역",
+    "name": "금강산특산물생산사업소",
+    "value": 1,
+    "description": "우리 사업소는 금강산을 비롯한 조선의 명산들에서 천연그대로 채취한 꿀벌산물(산꿀, 토종벌꿀, 왕벌젖, 벌풀 등), 농토산물(산나물, 버섯, 산열매 등)과 같은 농토특산품과 각종 술류, 건강식품류를 비롯한 특산품을 생산하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/락랑구역/락랑록양제약소",
+    "parent": "root/제약공장/평양시/락랑구역",
+    "name": "락랑록양제약소",
+    "value": 1,
+    "description": "락랑록양제약소에서는 인민들의 건강증진에 이바지할수있는 첨단급의 의약품과 기능성식료품들을 생산합니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/평천구역/토성제약공장",
+    "parent": "root/제약공장/평양시/평천구역",
+    "name": "토성제약공장",
+    "value": 1,
+    "description": "평양시 평천구역 봉남동에 자리잡고있는 토성제약공장은 주체82(1993)년 3월 2일에 주신 위대한 수령님의 유훈교시를 철저히 관철하기 위하여 1996년 2월 27일에 창립되였습니다.\n 토성제약공장은 창립 첫 시기부터 지금까지 품질관리를 생명으로 틀어쥐고 제품의 질을 높이기 위하여 꾸준히 노력하여왔으며 이 과정에 9개의 생산공정에 조선민주주의인민공화국 의약품생산 및 품질관리(GMP)인증을 받았으며 50여차의 국내축전 및 국제상품전람회들에 참가하여 우수한 평가를 받고 수십개의 금메달과 상장, 컵들을 수여받았습니다.\n 연건평 4 500㎡의 현대적인 생산건물과 새 제품개발실, 5개의 판매소를 가지고 연구개발과 생산, 판매를 진행하고있으며 통합생산조종체계를 구축하고 기업활동의 정보화를 높은 수준에서 실현하고있습니다.\n 공장은 앞으로 효능높은 고려약과 건강식품들을 연구개발하여 인민들의 건강증진에 적극 이바지할것이며 자기 땅에 발을 디디고 세계를 향하여 더욱 힘차게 나아갈것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/중구역/석암제약공장",
+    "parent": "root/제약공장/평양시/중구역",
+    "name": "석암제약공장",
+    "value": 1,
+    "description": "현대적인 제약설비들과 품질검사체계를 가지고있는것으로 하여 여러가지 특허제품들과 인민들의 호평을 받는 많은 효능있는 알약, 교갑약, 주사약, 눈약, 싸락약, 치약, 물약 등 70여가지 품종의 약품들을 년간 수십만통 생산하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/락랑구역/유아제약공장",
+    "parent": "root/제약공장/평양시/락랑구역",
+    "name": "유아제약공장",
+    "value": 1,
+    "description": "현대적인 제약설비들과 품질검사체계를 가지고있는것으로 하여 여러가지 특허제품들과 인민들의 호평을 받는 많은 효능있는 알약, 교갑약, 주사약, 눈약, 싸락약, 치약, 물약 등 70여가지 품종의 약품들을 년간 수십만통 생산하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/보통강구역",
+    "parent": "root/제약공장/평양시",
+    "name": "보통강구역"
+  },
+  {
+    "id": "root/제약공장/평양시/보통강구역/부강제약공장",
+    "parent": "root/제약공장/평양시/보통강구역",
+    "name": "부강제약공장",
+    "value": 1,
+    "description": "부강제약회사에서는 금당-2주사약과 혈궁불로정을 생산하여 여러나라보건성들에 공식등록하고 대량수출하고 있습니다.\n 세계의 수많은 통신, 신문, 잡지 및 출판물들이 금당-2주사약과 혈궁불로정에 대하여 널리 소개하고 있으며 전세계적으로 웨브싸이트들에서 금당-2주사약과 혈궁불로정에 대하여 론의한 총페지수는 600만페지에 달합니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/동대원구역",
+    "parent": "root/제약공장/평양시",
+    "name": "동대원구역"
+  },
+  {
+    "id": "root/제약공장/평양시/동대원구역/미래합작회사 미래제약공장",
+    "parent": "root/제약공장/평양시/동대원구역",
+    "name": "미래합작회사 미래제약공장",
+    "value": 1,
+    "description": "미래제약공장에서는 건강음료인 어료토칼시움수생산공정에 대한 식품안전관리체계인증 ISO22 000과 의약품생산공정에 대한 GMP인증을 받았으며 인민들의 건강증진에 이바지할수 있는 여러가지 새 제품들을 연구개발하고 있습니다. \n 우리는 최대의 품질과 최상의 위생안전성을 철저히 보장하면서 과학적이며 효률적인 경영전략으로 세계와의 경쟁력을 갖춘 기업으로 성장하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/중구역/칠골송도공장",
+    "parent": "root/제약공장/평양시/중구역",
+    "name": "칠골송도공장",
+    "value": 1,
+    "description": "칠골송도공장에서는 창립된때로부터 현재까지 각종식료품(술, 맥주, 사탕, 과자, 튀기)과 건강식품(왕벌젖), 기능성건강음료들을 생산하여 인민생활향상에 이바지하고 있습니다.\n 공장은 품질관리를 생명으로 틀어쥐고 제품의 질을 높이기 위해 꾸준히 노력하고있으며 이 과정에 모든 공정에 식품안전관리체계인증을 받았습니다.\n 공장에서 생산하는 왕벌젖과 그 가공제품들은 품질이 매우 높은것으로 여러차례 국가발명전시회와 국제건강 및 의료기구전시회에서 우수한 평가를 받고 금메달과 기술상을 수여받았으며 수십차례의 국내, 국제상품전람회들에서도 인민들의 호평을 받았습니다.\n 공장은 앞으로도 건강식품들과 건강음료들을 더 많이 생산하여 인민들의 건강증진에 도움을 주기 위하여 적극 노력할것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/미래제약회사",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "미래제약회사",
+    "value": 1,
+    "description": "미래제약회사는 과학기술과 품질담보, 위생안전을 기업관리의 주선으로 틀어쥐고 인민들의 건강증진과 생명안전에 필수적인 종합광물지의약품개발과 생산에서 중심거점으로 되고있습니다.\n미래제약회사에서는 앞으로 항생제를 비롯한 화학약물투여로도 효과를 보지 못하던 환자들에게 다량 및 미량원소, 희토류원소들의 종합체인 종합광물질의약품들로 질병과 전염병치료에 밝은 전망을 열어줄것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/명성제약공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "명성제약공장",
+    "value": 1,
+    "description": "명성제약공장에서는 품질보장을 첫째가는 자리에 놓고 생산공정의 무균무진화를 실현하여 주사약생산공정, 알약생산공정, 둥근알약생산공정, 클로람페니콜곰열눈약생산공정, 외용약생산공정, 교갑약생산공정, 싸락약생산공정, 가루약생산공정들에 대한 의약품GMP인증을 획득하였으며 위생안전성이 철저히 보장된 질좋고 효능이 높은 안궁우황환, 삼바리칼시움,자귀잎취장염알약,령묘우황환을 비릇한 인민들의 호평을 받는 여러가지 전통적인 고려약들과 특허제품들인 셀레아핀주사약을 비롯한 효능높은 의약품들을 생산하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대동강구역/청류제약공장",
+    "parent": "root/제약공장/평양시/대동강구역",
+    "name": "청류제약공장",
+    "value": 1,
+    "description": "공장에서 생산되고있는 의약품들은 독특한 처방조성과 치료효능으로 하여 널리 알려져있으며 모든 생산공정들은 과학적인 품질관리기준(GMP)에 준하고있습니다.\n 건강한 몸으로 오래 살기를 희망하는 사람들의 념원을 실현하는것을 자기 활동의 최고목표로 하고있는 청류제약공장에서는 앞으로도 우리 나라에 풍부한 천연약재들로 효능높은 여러가지 《고급약》들을 최상의 수준에서 최고의 품질로 정성다해 만들어 인류의 건강증진에 적극 이바지 할것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/모란봉구역",
+    "parent": "root/제약공장/평양시",
+    "name": "모란봉구역"
+  },
+  {
+    "id": "root/제약공장/평양시/모란봉구역/선진제약소",
+    "parent": "root/제약공장/평양시/모란봉구역",
+    "name": "선진제약소",
+    "value": 1,
+    "description": "선진제약소는 인민들의 병치료와 건강증진에 이바지할 효능높은 의약품에 대한 연구와 생산이 일체화된 제약소입니다.\n우리 제약소에서는 품질보장을 첫 자리에 놓고 살맹이불면증교갑약과 은행잎동맥경화주사약을 비롯하여 인민들이 선호하는 수십종의 의약품과 건강식품을 생산하고 있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평안남도",
+    "parent": "root/제약공장",
+    "name": "평안남도"
+  },
+  {
+    "id": "root/제약공장/평안남도/신양군",
+    "parent": "root/제약공장/평안남도",
+    "name": "신양군"
+  },
+  {
+    "id": "root/제약공장/평안남도/신양군/신양군영예군인고려약공장",
+    "parent": "root/제약공장/평안남도/신양군",
+    "name": "신양군영예군인고려약공장",
+    "value": 1,
+    "description": "의약품생산의 GMP화를 실현하고 경영정보화프로그람, GMP관리프로그람 등을 도입하여 기술주도형의 기업으로서의 면모를 갖춘 우리 공장은 산간지대에 있는데 맞게 머루, 다래, 도토리를 비롯한 산열매들을 거두어 가공하고 약초를 채취하는것을 비롯하여 천연원료에서 출발한 고려약생산기술로 인민들의 건강증진에 적극 이바지하는 수십여종의 약품과 건강식품을 생산하고있으며 주문송달봉사도 진행하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/천연제약공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "천연제약공장",
+    "value": 1,
+    "description": "천연제약공장은 수천년동안 전해오는 우리 선조들의 전통의학리론과 방법에 기초하여 천연약재들을 최신약제기술로 조화롭게 추출배합하여 제조한 천연고려약들을 생산하는 약품연구 및 생산, 판매기지입니다.\n 우리 공장에서는 전신순환개선으로 신약의 약점을 완전히 극복하면서도 자연의 순수한 천연약재로 효과가 뚜렷하고 품질이 높은 천연고려약들을 연구생산하고있습니다.\n 특히 심장기능개선에서 높은 효과를 나타내는 천연심장교갑약, 소화기계통질병치료에서 특효인 천연소화교갑약, 간경변을 비롯한 간장질병치료에서 우수한 천연간장교갑약, 특발성괴저, 골수염에 특효인 정향특발성괴저외용약, 천연갑상선교갑약, 청춘의 활력을 안겨주는 양춘삼록교갑약, 피부를 부드러우면서도 탄력있고 매끈하게 하여주는 천연미안막, 남녀로소 누구나 마시면 생기를 안겨주는 천연팔곡차 등 사람들의 건강증진에 이바지하는 약품 및 건강식품, 기능성화장품들을 개발생산하고있습니다.\n 공장은 약품생산과 주문에 필요한 조건과 환경을 충분히 갖추고있으며 공장의 제품들은 인민들속에서 호평을 받고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/중구역/오일건강음료종합공장 오일건강식품생산소",
+    "parent": "root/제약공장/평양시/중구역",
+    "name": "오일건강음료종합공장 오일건강식품생산소",
+    "value": 1,
+    "description": "세계와 경쟁하고 세계에 도전하는 제품들을 독창적으로 연구개발하는 유능한 인재들과 연구집단, 고급기능공들을 가진 가장 믿을만한 기업이며 인민들의 건강을 위하여 이바지하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/모란봉구역/모란봉고려약공장",
+    "parent": "root/제약공장/평양시/모란봉구역",
+    "name": "모란봉고려약공장",
+    "value": 1,
+    "description": "우리 공장에서는 인민들의 건강증진에 적극 이바지할수 있는 각종 형태의 의약품들과 건강식품들을 생산하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/자강도",
+    "parent": "root/제약공장",
+    "name": "자강도"
+  },
+  {
+    "id": "root/제약공장/자강도/강계시",
+    "parent": "root/제약공장/자강도",
+    "name": "강계시"
+  },
+  {
+    "id": "root/제약공장/자강도/강계시/강계고려약가공공장",
+    "parent": "root/제약공장/자강도/강계시",
+    "name": "강계고려약가공공장",
+    "value": 1,
+    "description": "강계고려약가공공장은 위대한 령도자 동지께서 주체95(2006)년 2월 4일과 주체99 (2010)년 7월 30일 두차례나 찾으시여 불멸의 령도업적을 새겨주신 뜻깊은 공장입니다.\n공장에서는 고려약을 엑스화할데 대한 당의 방침을 높이 받들고 적극적인 투쟁을 벌려 삼지구엽초엑스, 가시오갈피엑스, 미나리엑스, 생당쑥엑스, 찔광이엑스제품들에 《12월15일품질메달》을 수여받는 성과를 거두었습니다.\n공장에서는 품질을 철저히 보장하기 위하여 가루약, 알약, 둥근알약을 비롯한 여러공정들에 대하여 의약품GMP인증을 수여받았으며 공장제품들의 품질이 높은것으로 하여 국내의 여러전시회들과 국제상품전람회들에 참가하여 높은 평가를 받군 하였습니다.\n공장은 위대한 장군님의 사랑과 배려속에 현대적으로 꾸려진 고려약연구소를 가지고 있으며 연구사들은 가시오갈피나도금광국면역활성교갑약, 삼지구엽초강정교갑약, 생당쑥간염교갑약을 비롯하여 우리인민들의 체질에 맞고 효능높은 약들을 새로 개발하여 현실에 도입하기 위한 연구사업을 진행하고 있습니다.\n공장은 앞으로 위대한 장군님의 유훈을 높이 받들어 고려약을 엑스화하기 위한 연구사업을 더욱 다그치며 인민들의 건강증진에 적극 이바지하는 품질이 담보되는 효능높은 고려약들을 만들어 인민을 위하여 멸사복무하며 인민들의 사랑을 받는 공장이 되기 위하여 모든것을 다해나갈것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/룡성구역",
+    "parent": "root/제약공장/평양시",
+    "name": "룡성구역"
+  },
+  {
+    "id": "root/제약공장/평양시/룡성구역/향유제약소",
+    "parent": "root/제약공장/평양시/룡성구역",
+    "name": "향유제약소",
+    "value": 1,
+    "description": "조선의학협회 중앙위원회 향유제약소는 현대의학과학기술을 끊임없이 연구도입하여 새 제품을 개발하는것을 주선으로 틀어쥐고 품질담보 및 위생안전성이 철저히 담보된 새로운 형태의 약품들을 생산하고 있습니다.\n우리는 세계적인 약물개발추세에 맞게 피부를 통한 약물흡수로  여러가지 질병들을 치료할수 있는 베르베린피부연고와 베르베린피부물약을 비롯한 천연고려약제들을 현대적인 제약기술로 조화롭게 제조한 치료효능이 높은 고려약들을 생산판매하고 있습니다.\n제약소는 항생제를 비롯한 신약이 아니라 인체에 피해를 주지 않는 고려약을 피부와 점막을 통해 흡수시켜 치료하는 새로운 경피흡수제제를 많이 개발도입함으로써 환자들의 치료에 보다 큰 도움을 주는 기업체로 될것입니다",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/중구역/양춘제약소",
+    "parent": "root/제약공장/평양시/중구역",
+    "name": "양춘제약소",
+    "value": 1,
+    "description": "양춘제약소에서는 키토잔올리고당주사약(국규 35212:2016, 특허 65161, GMP 인증 01260)과 키토잔올리고당교갑(국규 40381:2022, 특허 70783, GMP 인증 01260)을 생산하고있습니다\n양춘제약소에서는 앞으로 새로운 키토잔올리고당조직재생분무약과 키토잔올리고당눈방울약, 키토잔올리고당건강수를 개발할 목표를 내세우고 적극 추진하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대동강구역/봄무지개식료품생산사업소",
+    "parent": "root/제약공장/평양시/대동강구역",
+    "name": "봄무지개식료품생산사업소",
+    "value": 1,
+    "description": "우리 관문무역회사에서는 찔광이차 결명자차 인삼구기자차 녀성들의 건강에 좋은 주목차를 비롯하여 인민들의 건강증진에 이바지할수 있는 여러가지 차제품들과 건강식품들을 연구개발하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대성구역/구룡산제약소",
+    "parent": "root/제약공장/평양시/대성구역",
+    "name": "구룡산제약소",
+    "value": 1,
+    "description": "구룡산제약소에서는 우리 나라에 있는 천연식물자원들의 활성성분들을 첨단기술로 추출분리하여 조화롭게 배합하고 수년간의 림상검토를 거쳐 특허제품들인 혈맥부활플라본과 천수국루테인, 분취시리긴, 코릴라긴교갑약과 같은 건강식품 및 의약품들을 생산하고 있습니다.\n제약소는 각종 분석분야와 건강식품소재에 대한 연구 및 생산분야에서40 여년간의 우수한 경험과 전문실력을 소유한 과학기술력량에 의거하여 각종 천연물추출설비들과 첨단분석설비들을 일식으로 장비하고있으며 알약, 교갑약, 싸락약을 비롯한 8 개 공정에 대한 의약품 GMP 인증을 받았습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/금강산제약공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "금강산제약공장",
+    "value": 1,
+    "description": "주체106 (2017)년 7월 19일 창립된 금강산제약공장은 광복지구상업중심과 마주하고 있는 풍치수려한 언덕우에 자리잡고 있습니다.\n금강산제약공장은 현대적인 제약설비와 분석 및 실험설비들로 구축되여 있으며 제품생산의 질을 생명으로 여기고 의약품의 품질을 높이기 위한 사업을 꾸준히 벌려 주체 109 (2020)년 12월에 10가지의 생산공정과 116가지의 제품에 대한 GMP인증을 획득하였으며 인민들이 선호하고 절실히 요구하는 수많은 필수의약품과 상비의약품, 치과위생용품을 생산하여 인민들의 건강증진에 적극 이바지하였습니다.\n공장에서는 과학기술사업을 확고히 틀어쥐고 새 제품개발사업을 힘있게 벌려 향부자소화알약, 티클로피딘장용알약, 나프토피딜알약, 단너삼뇌기능강화액을 비롯한 해당 질병들에 특효가 있는 의약품을 개발생산하였으며 이 과정에 여러건의 특허증서와 상장들을 받았습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/강봉건강식품공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "강봉건강식품공장",
+    "value": 1,
+    "description": "강봉건강식품공장은 의약품 및 건강식품생산을 전문으로 하는 공장입니다.\n연구개발과 생산, 판매를 유기적으로 결합한 과학기술주도형의 고리형순환체계를 확립한 공장에서는 과학기술품질담보를 주선으로 틀어쥐고 여러가지 천연약제품, 건강식품들을 더 많이 생산하여 국내와 국제적인 범위에서 의학과학기술교류사업을 활발히 벌려나갈것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/자강도/강계시/강계시고려약공장",
+    "parent": "root/제약공장/자강도/강계시",
+    "name": "강계시고려약공장",
+    "value": 1,
+    "description": "강계시고려약공장에서는 현대적인 초림계류체추출설비로 고지혈증치료에 효능이 높은 달맞이꽃씨기름, 살구씨기름을 생산하며 삼지구엽초엑스, 단나무잎엑스, 령신환, 륙미환, 생당쑥간염단알약, 록두간보호알약,너삼글리벤당뇨알약, 도라지차조기천식알약, 오미자단물약,마가목기침단물약, 율무창출고, 인진고, 키토잔액, 패독교갑약, 탁산항암주사약, 다릅항암주사약, 황금아연기관지염교갑약,벌풀눈약, 단나무열매차, 삼지구엽초차 등 우리 나라의 원료와 자원에 의거한 70 여가지의 효능높은 고려약들을 생산하고 있으며\n전반적생산공정과 약품관리판매에 이르기까지 품질관리의 요구를 철저히 지켜 주체 111 (2022)년 9 월 8 일 9 개공정에 대한 의약품 GMP 인증을 받고 두릅감초간염교갑약에 대한 연구사업을 진행하여 국가규격을 받았습니다.\n공장에서는 자체의 과학기술력량과 인재들을 중시하여 통합생산실과 조직배양실을 꾸리고 단나무, 흰삽주, 감초, 지황 등 고려약생산에 필요한 약초들을 자체의 힘으로 배양하여 인민들의 건강증진에 이바지 할수있는 효능높은 고려약생산에 적극 이바지하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/평양의료기구기술사",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "평양의료기구기술사",
+    "value": 1,
+    "description": "평양의료기구기술사는 위대한 장군님께서 일떠세워주신 의료기구개발 수리 및 현대화기지입니다.\n기업소에서는 지금까지 전국의 많은 병원들의 의료설비들을 수리하고 현대화하였으며 자체의 기술로 새 의료기구개발사업을 힘있게 벌리였습니다.\n이 과정에 기업소에서는 초음파진단기, 이동식렌트겐, 휴대용해산감시장치를 개발하므로써 당에 기쁨을 드리였으며 지금도 강력한 과학기술력량과 그쯘한 설비를 갖추고 새 의료기구들을 개발하고 의료설비들의 정상가동을 위한 수리 및 현대화를 진행하고있으며 인민들의 건강증진에 이바지할수 있는 손전화의료용봉사프로그람들을 개발하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/중구역/중구고려약공장",
+    "parent": "root/제약공장/평양시/중구역",
+    "name": "중구고려약공장",
+    "value": 1,
+    "description": "공장에서는 삼향우황청심환을 비롯한 효능높은 고려약들과 나노은두충보양액과 같은 건강식품들을 생산하고 있습니다",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대동강구역/고려명승건강식료제약공장",
+    "parent": "root/제약공장/평양시/대동강구역",
+    "name": "고려명승건강식료제약공장",
+    "value": 1,
+    "description": "고려명승건강식료제약공장은 1996년에 창설되여 사람들의 생명과 건강에 이바지하며 발전의 길을 걸어온 이름있는 공장입니다.  \t\n공장에서는 우리 선조들의 슬기와 지혜가 함축된 전통의학을 계승하여 대대로 내려오는 신비한 제조비법과 첨단기술이 도입된 수십여종의 의약품들과 건강식품들에 대한 생산과 판매를 진행하고 있습니다. \t\n제품원료로 쓰이는 약초들은 모두 천연산지에서 채취하여 선별과 검사를 통하여 생산에 리용되며 공장제품들은 사람들속에서 만족한 호평을 받고있습니다. \t\n우리는 생산공정에 대한 엄격한 품질관리체계를 세우고 모든 공정들에 대한 관리를 GMP기준에 맞게 진행하고있으며 9개공정에 대한 조선민주주의인민공화국 의약품생산 및 품질관리인증을 받았습니다. \t\n우리 공장은 실력있는 기술자 기능공들로 세계적인 경쟁력을 가진 의약품과 건강식품들을 더 많이 개발 생산하기 위하여 노력하고 있습니다. \t\n앞으로 우리는 세계 여러 나라들과의 공동의 합작과 교류를 다방면적으로 발전시켜 나가기 위하여 적극 헌신할것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/만경대구역/평양전자의료기구공장",
+    "parent": "root/제약공장/평양시/만경대구역",
+    "name": "평양전자의료기구공장",
+    "value": 1,
+    "description": "당의 은정속에 보건부문의 물질기술적토대강화를 위하여 새롭게 개건현대화된 평양전자의료기구공장은 연구개발과 생산, 판매가 일체화되였으며 2종의 렌트겐진단장치(수자식렌트겐, CCD화상결합형렌트겐)와 3종의 전자의료기구(복부초음파기, 심전계, 위내시경), 4종의 필수의료기구(증기압소독기, 고순도증류수기, 자동인공호흡기, 수술용전신마취기)들은 물론 여러가지 가정용 의료기구들을 생산하여 인민들의 건강증진에 이바지하고있습니다.\n공장에서는 현시기 당의 의도를 높이 받들고 비상방역상황과 보건부문의 물질기술적토대를 완비하기 위한 제품개발연구를 더욱 심화시켜 인민들이 선호하고 반기는 보건제품들을 더 많이 생산할것입니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/제약공장/평양시/대성구역/령군봉건강제품생산소",
+    "parent": "root/제약공장/평양시/대성구역",
+    "name": "령군봉건강제품생산소",
+    "value": 1,
+    "description": "령군봉건강제품생산소에서는 비약물적인 선택과 자체치료를 우선시하는 건강관리의 요구에 맞게 질과 위생안전성이 철저히 담보된 가정용 의료기구들과 건강식품들을 전문으로 생산하고있습니다. \n의료기구분야에서 풍부한 국제교류경험을 가지고있는 우수한 기술력량과 제작설비들을 갖추고있으며 각종 성능높은 편광치료기들과  휴대용심장혈관검사기, 휴대용반도체레이자치료기, 전위선치료기, 동종기술제품들을 생산하고있습니다.",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소",
+    "parent": "root",
+    "name": "의학연구소"
+  },
+  {
+    "id": "root/의학연구소/강원도",
+    "parent": "root/의학연구소",
+    "name": "강원도"
+  },
+  {
+    "id": "root/의학연구소/강원도/문천시",
+    "parent": "root/의학연구소/강원도",
+    "name": "문천시"
+  },
+  {
+    "id": "root/의학연구소/강원도/문천시/의학연구원 산업의학연구소 문천분소",
+    "parent": "root/의학연구소/강원도/문천시",
+    "name": "의학연구원 산업의학연구소 문천분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/개성시",
+    "parent": "root/의학연구소",
+    "name": "개성시"
+  },
+  {
+    "id": "root/의학연구소/개성시/개성시지구",
+    "parent": "root/의학연구소/개성시",
+    "name": "개성시지구"
+  },
+  {
+    "id": "root/의학연구소/개성시/개성시지구/의학연구원 약초재배연구소 개성분소",
+    "parent": "root/의학연구소/개성시/개성시지구",
+    "name": "의학연구원 약초재배연구소 개성분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/남포시",
+    "parent": "root/의학연구소",
+    "name": "남포시"
+  },
+  {
+    "id": "root/의학연구소/남포시/와우도구역",
+    "parent": "root/의학연구소/남포시",
+    "name": "와우도구역"
+  },
+  {
+    "id": "root/의학연구소/남포시/와우도구역/남포의학기술교류소",
+    "parent": "root/의학연구소/남포시/와우도구역",
+    "name": "남포의학기술교류소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평안남도",
+    "parent": "root/의학연구소",
+    "name": "평안남도"
+  },
+  {
+    "id": "root/의학연구소/평안남도/대동군",
+    "parent": "root/의학연구소/평안남도",
+    "name": "대동군"
+  },
+  {
+    "id": "root/의학연구소/평안남도/대동군/보건성 고려약설계연구소",
+    "parent": "root/의학연구소/평안남도/대동군",
+    "name": "보건성 고려약설계연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평안북도",
+    "parent": "root/의학연구소",
+    "name": "평안북도"
+  },
+  {
+    "id": "root/의학연구소/평안북도/정주시",
+    "parent": "root/의학연구소/평안북도",
+    "name": "정주시"
+  },
+  {
+    "id": "root/의학연구소/평안북도/정주시/의학연구원 정신신경의학연구소 정주분소",
+    "parent": "root/의학연구소/평안북도/정주시",
+    "name": "의학연구원 정신신경의학연구소 정주분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시",
+    "parent": "root/의학연구소",
+    "name": "평양시"
+  },
+  {
+    "id": "root/의학연구소/평양시/만경대구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "만경대구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/만경대구역/의학연구원 환경위생연구소",
+    "parent": "root/의학연구소/평양시/만경대구역",
+    "name": "의학연구원 환경위생연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/만경대구역/최경태내분비연구소",
+    "parent": "root/의학연구소/평양시/만경대구역",
+    "name": "최경태내분비연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/룡성구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "룡성구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/룡성구역/의학연구원 73호연구소",
+    "parent": "root/의학연구소/평양시/룡성구역",
+    "name": "의학연구원 73호연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/동대원구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "동대원구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/동대원구역/의학연구원 어린이영양관리연구소",
+    "parent": "root/의학연구소/평양시/동대원구역",
+    "name": "의학연구원 어린이영양관리연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/락랑구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "락랑구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/락랑구역/의학연구원 의학생물학연구소",
+    "parent": "root/의학연구소/평양시/락랑구역",
+    "name": "의학연구원 의학생물학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/은정구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "은정구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/은정구역/의학연구원 미생물연구소",
+    "parent": "root/의학연구소/평양시/은정구역",
+    "name": "의학연구원 미생물연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/평천구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "평천구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/평천구역/의학연구원 방사선의학연구소",
+    "parent": "root/의학연구소/평양시/평천구역",
+    "name": "의학연구원 방사선의학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/동대원구역/보건성 의료기구공업관리국 의료기구연구소",
+    "parent": "root/의학연구소/평양시/동대원구역",
+    "name": "보건성 의료기구공업관리국 의료기구연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/평천구역/보건성 인구연구소",
+    "parent": "root/의학연구소/평양시/평천구역",
+    "name": "보건성 인구연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/대동강구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "대동강구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/대동강구역/보건성 보건경영학연구소",
+    "parent": "root/의학연구소/평양시/대동강구역",
+    "name": "보건성 보건경영학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/락랑구역/의학연구원",
+    "parent": "root/의학연구소/평양시/락랑구역",
+    "name": "의학연구원",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/중구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "중구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/중구역/평양의학대학 유전의학연구소",
+    "parent": "root/의학연구소/평양시/중구역",
+    "name": "평양의학대학 유전의학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/락랑구역/의학연구원 항체공학연구소",
+    "parent": "root/의학연구소/평양시/락랑구역",
+    "name": "의학연구원 항체공학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/대동강구역/국가과학원 생물공학분원 게놈생물안정성연구소",
+    "parent": "root/의학연구소/평양시/대동강구역",
+    "name": "국가과학원 생물공학분원 게놈생물안정성연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/만경대구역/체육연구원 체육의학연구소",
+    "parent": "root/의학연구소/평양시/만경대구역",
+    "name": "체육연구원 체육의학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/중구역/평양의학대학 면역연구소",
+    "parent": "root/의학연구소/평양시/중구역",
+    "name": "평양의학대학 면역연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/보통강구역",
+    "parent": "root/의학연구소/평양시",
+    "name": "보통강구역"
+  },
+  {
+    "id": "root/의학연구소/평양시/보통강구역/보건성 자연치료연구소",
+    "parent": "root/의학연구소/평양시/보통강구역",
+    "name": "보건성 자연치료연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/락랑구역/의학연구원 기생충연구소",
+    "parent": "root/의학연구소/평양시/락랑구역",
+    "name": "의학연구원 기생충연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/함경남도",
+    "parent": "root/의학연구소",
+    "name": "함경남도"
+  },
+  {
+    "id": "root/의학연구소/함경남도/회상구역",
+    "parent": "root/의학연구소/함경남도",
+    "name": "회상구역"
+  },
+  {
+    "id": "root/의학연구소/함경남도/회상구역/보건성 제약공업관리국 설계연구소",
+    "parent": "root/의학연구소/함경남도/회상구역",
+    "name": "보건성 제약공업관리국 설계연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/함경북도",
+    "parent": "root/의학연구소",
+    "name": "함경북도"
+  },
+  {
+    "id": "root/의학연구소/함경북도/포항구역",
+    "parent": "root/의학연구소/함경북도",
+    "name": "포항구역"
+  },
+  {
+    "id": "root/의학연구소/함경북도/포항구역/의학과학원 청진림상연구소",
+    "parent": "root/의학연구소/함경북도/포항구역",
+    "name": "의학과학원 청진림상연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/함경북도/신암구역",
+    "parent": "root/의학연구소/함경북도",
+    "name": "신암구역"
+  },
+  {
+    "id": "root/의학연구소/함경북도/신암구역/의학연구원 해양의학연구소",
+    "parent": "root/의학연구소/함경북도/신암구역",
+    "name": "의학연구원 해양의학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/황해남도",
+    "parent": "root/의학연구소",
+    "name": "황해남도"
+  },
+  {
+    "id": "root/의학연구소/황해남도/은천군",
+    "parent": "root/의학연구소/황해남도",
+    "name": "은천군"
+  },
+  {
+    "id": "root/의학연구소/황해남도/은천군/정신신경연구소 은천분소",
+    "parent": "root/의학연구소/황해남도/은천군",
+    "name": "정신신경연구소 은천분소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평양시/평천구역/의학연구원 종양연구소",
+    "parent": "root/의학연구소/평양시/평천구역",
+    "name": "의학연구원 종양연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/의학연구소/평안북도/신의주시",
+    "parent": "root/의학연구소/평안북도",
+    "name": "신의주시"
+  },
+  {
+    "id": "root/의학연구소/평안북도/신의주시/의학연구원 정신신경의학연구소",
+    "parent": "root/의학연구소/평안북도/신의주시",
+    "name": "의학연구원 정신신경의학연구소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소",
+    "parent": "root",
+    "name": "요양소"
+  },
+  {
+    "id": "root/요양소/강원도",
+    "parent": "root/요양소",
+    "name": "강원도"
+  },
+  {
+    "id": "root/요양소/강원도/창도군",
+    "parent": "root/요양소/강원도",
+    "name": "창도군"
+  },
+  {
+    "id": "root/요양소/강원도/창도군/장현약수료양소",
+    "parent": "root/요양소/강원도/창도군",
+    "name": "장현약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/강원도/회양군",
+    "parent": "root/요양소/강원도",
+    "name": "회양군"
+  },
+  {
+    "id": "root/요양소/강원도/회양군/회양군 금철리약수료양소",
+    "parent": "root/요양소/강원도/회양군",
+    "name": "회양군 금철리약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/남포시",
+    "parent": "root/요양소",
+    "name": "남포시"
+  },
+  {
+    "id": "root/요양소/남포시/강서구역",
+    "parent": "root/요양소/남포시",
+    "name": "강서구역"
+  },
+  {
+    "id": "root/요양소/남포시/강서구역/청산약수료양소",
+    "parent": "root/요양소/남포시/강서구역",
+    "name": "청산약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평양시",
+    "parent": "root/요양소",
+    "name": "평양시"
+  },
+  {
+    "id": "root/요양소/평양시/라선시",
+    "parent": "root/요양소/평양시",
+    "name": "라선시"
+  },
+  {
+    "id": "root/요양소/평양시/라선시/라선시 청학료양소",
+    "parent": "root/요양소/평양시/라선시",
+    "name": "라선시 청학료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평양시/라선시/라선시 장애자료양소",
+    "parent": "root/요양소/평양시/라선시",
+    "name": "라선시 장애자료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/량강도",
+    "parent": "root/요양소",
+    "name": "량강도"
+  },
+  {
+    "id": "root/요양소/량강도/김정숙군",
+    "parent": "root/요양소/량강도",
+    "name": "김정숙군"
+  },
+  {
+    "id": "root/요양소/량강도/김정숙군/룡하약수료양소",
+    "parent": "root/요양소/량강도/김정숙군",
+    "name": "룡하약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/량강도/풍서군",
+    "parent": "root/요양소/량강도",
+    "name": "풍서군"
+  },
+  {
+    "id": "root/요양소/량강도/풍서군/량강도 풍서군 림산병원정양소",
+    "parent": "root/요양소/량강도/풍서군",
+    "name": "량강도 풍서군 림산병원정양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/량강도/보천군",
+    "parent": "root/요양소/량강도",
+    "name": "보천군"
+  },
+  {
+    "id": "root/요양소/량강도/보천군/량강도 내곡온천료양소",
+    "parent": "root/요양소/량강도/보천군",
+    "name": "량강도 내곡온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도",
+    "parent": "root/요양소",
+    "name": "자강도"
+  },
+  {
+    "id": "root/요양소/자강도/강계시",
+    "parent": "root/요양소/자강도",
+    "name": "강계시"
+  },
+  {
+    "id": "root/요양소/자강도/강계시/향로약수료양소",
+    "parent": "root/요양소/자강도/강계시",
+    "name": "향로약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/만포시",
+    "parent": "root/요양소/자강도",
+    "name": "만포시"
+  },
+  {
+    "id": "root/요양소/자강도/만포시/연하약수료양소",
+    "parent": "root/요양소/자강도/만포시",
+    "name": "연하약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/만포시/미타약수료양소",
+    "parent": "root/요양소/자강도/만포시",
+    "name": "미타약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/동신군",
+    "parent": "root/요양소/자강도",
+    "name": "동신군"
+  },
+  {
+    "id": "root/요양소/자강도/동신군/자강도 동신군 약수료양소",
+    "parent": "root/요양소/자강도/동신군",
+    "name": "자강도 동신군 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/동신군/가지목약수료양소",
+    "parent": "root/요양소/자강도/동신군",
+    "name": "가지목약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/화평군",
+    "parent": "root/요양소/자강도",
+    "name": "화평군"
+  },
+  {
+    "id": "root/요양소/자강도/화평군/리평약수료양소",
+    "parent": "root/요양소/자강도/화평군",
+    "name": "리평약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/시중군",
+    "parent": "root/요양소/자강도",
+    "name": "시중군"
+  },
+  {
+    "id": "root/요양소/자강도/시중군/자강도 시중군 약수료양소",
+    "parent": "root/요양소/자강도/시중군",
+    "name": "자강도 시중군 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/위원군",
+    "parent": "root/요양소/자강도",
+    "name": "위원군"
+  },
+  {
+    "id": "root/요양소/자강도/위원군/고보약수료양소",
+    "parent": "root/요양소/자강도/위원군",
+    "name": "고보약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/초산군",
+    "parent": "root/요양소/자강도",
+    "name": "초산군"
+  },
+  {
+    "id": "root/요양소/자강도/초산군/운평약수료양소",
+    "parent": "root/요양소/자강도/초산군",
+    "name": "운평약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/우시군",
+    "parent": "root/요양소/자강도",
+    "name": "우시군"
+  },
+  {
+    "id": "root/요양소/자강도/우시군/가하약수료양소",
+    "parent": "root/요양소/자강도/우시군",
+    "name": "가하약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/고풍군",
+    "parent": "root/요양소/자강도",
+    "name": "고풍군"
+  },
+  {
+    "id": "root/요양소/자강도/고풍군/자강도 고풍군 약수료양소",
+    "parent": "root/요양소/자강도/고풍군",
+    "name": "자강도 고풍군 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/송원군",
+    "parent": "root/요양소/자강도",
+    "name": "송원군"
+  },
+  {
+    "id": "root/요양소/자강도/송원군/전창약수료양소",
+    "parent": "root/요양소/자강도/송원군",
+    "name": "전창약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/전천군",
+    "parent": "root/요양소/자강도",
+    "name": "전천군"
+  },
+  {
+    "id": "root/요양소/자강도/전천군/신적약수료양소",
+    "parent": "root/요양소/자강도/전천군",
+    "name": "신적약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/희천시",
+    "parent": "root/요양소/자강도",
+    "name": "희천시"
+  },
+  {
+    "id": "root/요양소/자강도/희천시/자강도 희천시 관대약수료양소",
+    "parent": "root/요양소/자강도/희천시",
+    "name": "자강도 희천시 관대약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/랑림군",
+    "parent": "root/요양소/자강도",
+    "name": "랑림군"
+  },
+  {
+    "id": "root/요양소/자강도/랑림군/자강도 랑림군 운수약수료양소",
+    "parent": "root/요양소/자강도/랑림군",
+    "name": "자강도 랑림군 운수약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/희천시/보건성 희천영예군인료양소",
+    "parent": "root/요양소/자강도/희천시",
+    "name": "보건성 희천영예군인료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/자강도/동신군/원흥료양소",
+    "parent": "root/요양소/자강도/동신군",
+    "name": "원흥료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도",
+    "parent": "root/요양소",
+    "name": "평안남도"
+  },
+  {
+    "id": "root/요양소/평안남도/숙천군",
+    "parent": "root/요양소/평안남도",
+    "name": "숙천군"
+  },
+  {
+    "id": "root/요양소/평안남도/숙천군/검흥료양소",
+    "parent": "root/요양소/평안남도/숙천군",
+    "name": "검흥료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/안주시",
+    "parent": "root/요양소/평안남도",
+    "name": "안주시"
+  },
+  {
+    "id": "root/요양소/평안남도/안주시/송학료양소",
+    "parent": "root/요양소/평안남도/안주시",
+    "name": "송학료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/맹산군",
+    "parent": "root/요양소/평안남도",
+    "name": "맹산군"
+  },
+  {
+    "id": "root/요양소/평안남도/맹산군/유승온천료양소",
+    "parent": "root/요양소/평안남도/맹산군",
+    "name": "유승온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/대흥군",
+    "parent": "root/요양소/평안남도",
+    "name": "대흥군"
+  },
+  {
+    "id": "root/요양소/평안남도/대흥군/랑림료양소",
+    "parent": "root/요양소/평안남도/대흥군",
+    "name": "랑림료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/녕원군",
+    "parent": "root/요양소/평안남도",
+    "name": "녕원군"
+  },
+  {
+    "id": "root/요양소/평안남도/녕원군/장산약수료양소",
+    "parent": "root/요양소/평안남도/녕원군",
+    "name": "장산약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/성천군",
+    "parent": "root/요양소/평안남도",
+    "name": "성천군"
+  },
+  {
+    "id": "root/요양소/평안남도/성천군/온정료양소",
+    "parent": "root/요양소/평안남도/성천군",
+    "name": "온정료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/양덕군",
+    "parent": "root/요양소/평안남도",
+    "name": "양덕군"
+  },
+  {
+    "id": "root/요양소/평안남도/양덕군/양덕온천문화휴양지",
+    "parent": "root/요양소/평안남도/양덕군",
+    "name": "양덕온천문화휴양지",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안남도/숙천군/검흥리료양소",
+    "parent": "root/요양소/평안남도/숙천군",
+    "name": "검흥리료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평북도",
+    "parent": "root/요양소",
+    "name": "평북도"
+  },
+  {
+    "id": "root/요양소/평북도/선천군",
+    "parent": "root/요양소/평북도",
+    "name": "선천군"
+  },
+  {
+    "id": "root/요양소/평북도/선천군/보건성 옥호동료양소",
+    "parent": "root/요양소/평북도/선천군",
+    "name": "보건성 옥호동료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도",
+    "parent": "root/요양소",
+    "name": "평안북도"
+  },
+  {
+    "id": "root/요양소/평안북도/곽산군",
+    "parent": "root/요양소/평안북도",
+    "name": "곽산군"
+  },
+  {
+    "id": "root/요양소/평안북도/곽산군/군산료양소",
+    "parent": "root/요양소/평안북도/곽산군",
+    "name": "군산료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/운산군",
+    "parent": "root/요양소/평안북도",
+    "name": "운산군"
+  },
+  {
+    "id": "root/요양소/평안북도/운산군/우제온천료양소",
+    "parent": "root/요양소/평안북도/운산군",
+    "name": "우제온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/운산군/부흥료양소",
+    "parent": "root/요양소/평안북도/운산군",
+    "name": "부흥료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/운산군/평안북도 운산군 조산약수료양소",
+    "parent": "root/요양소/평안북도/운산군",
+    "name": "평안북도 운산군 조산약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/태천군",
+    "parent": "root/요양소/평안북도",
+    "name": "태천군"
+  },
+  {
+    "id": "root/요양소/평안북도/태천군/덕화료양소",
+    "parent": "root/요양소/평안북도/태천군",
+    "name": "덕화료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/태천군/소니골료양소",
+    "parent": "root/요양소/평안북도/태천군",
+    "name": "소니골료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/구성시",
+    "parent": "root/요양소/평안북도",
+    "name": "구성시"
+  },
+  {
+    "id": "root/요양소/평안북도/구성시/구성시 약수료양소",
+    "parent": "root/요양소/평안북도/구성시",
+    "name": "구성시 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/천마군",
+    "parent": "root/요양소/평안북도",
+    "name": "천마군"
+  },
+  {
+    "id": "root/요양소/평안북도/천마군/신시약수료양소",
+    "parent": "root/요양소/평안북도/천마군",
+    "name": "신시약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평북도/대관군",
+    "parent": "root/요양소/평북도",
+    "name": "대관군"
+  },
+  {
+    "id": "root/요양소/평북도/대관군/신온온천료양소",
+    "parent": "root/요양소/평북도/대관군",
+    "name": "신온온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/동창군",
+    "parent": "root/요양소/평안북도",
+    "name": "동창군"
+  },
+  {
+    "id": "root/요양소/평안북도/동창군/대동약수료양소",
+    "parent": "root/요양소/평안북도/동창군",
+    "name": "대동약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/향산군",
+    "parent": "root/요양소/평안북도",
+    "name": "향산군"
+  },
+  {
+    "id": "root/요양소/평안북도/향산군/석창온천료양소",
+    "parent": "root/요양소/평안북도/향산군",
+    "name": "석창온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/철산군",
+    "parent": "root/요양소/평안북도",
+    "name": "철산군"
+  },
+  {
+    "id": "root/요양소/평안북도/철산군/평안북도 철산군 약수료양소",
+    "parent": "root/요양소/평안북도/철산군",
+    "name": "평안북도 철산군 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/녕변군",
+    "parent": "root/요양소/평안북도",
+    "name": "녕변군"
+  },
+  {
+    "id": "root/요양소/평안북도/녕변군/평안북도 녕변군 약수료양소",
+    "parent": "root/요양소/평안북도/녕변군",
+    "name": "평안북도 녕변군 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/구장군",
+    "parent": "root/요양소/평안북도",
+    "name": "구장군"
+  },
+  {
+    "id": "root/요양소/평안북도/구장군/평안북도 구장군 신흥약수료양소",
+    "parent": "root/요양소/평안북도/구장군",
+    "name": "평안북도 구장군 신흥약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/평안북도/천마군/평안북도 천마군 약수료양소",
+    "parent": "root/요양소/평안북도/천마군",
+    "name": "평안북도 천마군 약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경남도",
+    "parent": "root/요양소",
+    "name": "함경남도"
+  },
+  {
+    "id": "root/요양소/함경남도/허천군",
+    "parent": "root/요양소/함경남도",
+    "name": "허천군"
+  },
+  {
+    "id": "root/요양소/함경남도/허천군/상농약수료양소",
+    "parent": "root/요양소/함경남도/허천군",
+    "name": "상농약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도",
+    "parent": "root/요양소",
+    "name": "함경북도"
+  },
+  {
+    "id": "root/요양소/함경북도/경성군",
+    "parent": "root/요양소/함경북도",
+    "name": "경성군"
+  },
+  {
+    "id": "root/요양소/함경북도/경성군/보건성 경성온천료양소",
+    "parent": "root/요양소/함경북도/경성군",
+    "name": "보건성 경성온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도/김책시",
+    "parent": "root/요양소/함경북도",
+    "name": "김책시"
+  },
+  {
+    "id": "root/요양소/함경북도/김책시/보건성 세천료양소",
+    "parent": "root/요양소/함경북도/김책시",
+    "name": "보건성 세천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도/부령군",
+    "parent": "root/요양소/함경북도",
+    "name": "부령군"
+  },
+  {
+    "id": "root/요양소/함경북도/부령군/함경북도 부령군 팔담료양소",
+    "parent": "root/요양소/함경북도/부령군",
+    "name": "함경북도 부령군 팔담료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도/어랑군",
+    "parent": "root/요양소/함경북도",
+    "name": "어랑군"
+  },
+  {
+    "id": "root/요양소/함경북도/어랑군/함경북도 어랑군 무계호료양소",
+    "parent": "root/요양소/함경북도/어랑군",
+    "name": "함경북도 어랑군 무계호료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도/청진시",
+    "parent": "root/요양소/함경북도",
+    "name": "청진시"
+  },
+  {
+    "id": "root/요양소/함경북도/청진시/룡천료양소",
+    "parent": "root/요양소/함경북도/청진시",
+    "name": "룡천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도/김책시/송흥료양소",
+    "parent": "root/요양소/함경북도/김책시",
+    "name": "송흥료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/함경북도/어랑군/함경북도 어랑군 칠향온천료양소",
+    "parent": "root/요양소/함경북도/어랑군",
+    "name": "함경북도 어랑군 칠향온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도",
+    "parent": "root/요양소",
+    "name": "황해남도"
+  },
+  {
+    "id": "root/요양소/황해남도/태탄군",
+    "parent": "root/요양소/황해남도",
+    "name": "태탄군"
+  },
+  {
+    "id": "root/요양소/황해남도/태탄군/황해남도 태탄군 기후료양소",
+    "parent": "root/요양소/황해남도/태탄군",
+    "name": "황해남도 태탄군 기후료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/은천군",
+    "parent": "root/요양소/황해남도",
+    "name": "은천군"
+  },
+  {
+    "id": "root/요양소/황해남도/은천군/초정약수료양소",
+    "parent": "root/요양소/황해남도/은천군",
+    "name": "초정약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/배천군",
+    "parent": "root/요양소/황해남도",
+    "name": "배천군"
+  },
+  {
+    "id": "root/요양소/황해남도/배천군/금성온천료양소",
+    "parent": "root/요양소/황해남도/배천군",
+    "name": "금성온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/청단군",
+    "parent": "root/요양소/황해남도",
+    "name": "청단군"
+  },
+  {
+    "id": "root/요양소/황해남도/청단군/흥산기후료양소",
+    "parent": "root/요양소/황해남도/청단군",
+    "name": "흥산기후료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/은률군",
+    "parent": "root/요양소/황해남도",
+    "name": "은률군"
+  },
+  {
+    "id": "root/요양소/황해남도/은률군/황해남도 은률군 백반료양소",
+    "parent": "root/요양소/황해남도/은률군",
+    "name": "황해남도 은률군 백반료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/옹진군",
+    "parent": "root/요양소/황해남도",
+    "name": "옹진군"
+  },
+  {
+    "id": "root/요양소/황해남도/옹진군/한동약수료양소",
+    "parent": "root/요양소/황해남도/옹진군",
+    "name": "한동약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/옹진군/옹진온천료양소",
+    "parent": "root/요양소/황해남도/옹진군",
+    "name": "옹진온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/봉천군",
+    "parent": "root/요양소/황해남도",
+    "name": "봉천군"
+  },
+  {
+    "id": "root/요양소/황해남도/봉천군/봉천온천료양소",
+    "parent": "root/요양소/황해남도/봉천군",
+    "name": "봉천온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해남도/은천군/은천온천료양소",
+    "parent": "root/요양소/황해남도/은천군",
+    "name": "은천온천료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해북도",
+    "parent": "root/요양소",
+    "name": "황해북도"
+  },
+  {
+    "id": "root/요양소/황해북도/수안군",
+    "parent": "root/요양소/황해북도",
+    "name": "수안군"
+  },
+  {
+    "id": "root/요양소/황해북도/수안군/황해북도 수안군 서평료양소",
+    "parent": "root/요양소/황해북도/수안군",
+    "name": "황해북도 수안군 서평료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  },
+  {
+    "id": "root/요양소/황해북도/신계군",
+    "parent": "root/요양소/황해북도",
+    "name": "신계군"
+  },
+  {
+    "id": "root/요양소/황해북도/신계군/황해북도 신계군 침교약수료양소",
+    "parent": "root/요양소/황해북도/신계군",
+    "name": "황해북도 신계군 침교약수료양소",
+    "value": 1,
+    "description": "",
+    "nearby_facilities": ""
+  }
+];
+
+Highcharts.chart('container', {
+  chart: { height: '100%' },
+  title: { text: '의료 시설 분포 현황' },
+  subtitle: { text: '데이터 출처: data.xlsx' },
+
+  series: [{
+    type: 'sunburst',
+    data: data,
+    name: 'Root',
+    allowDrillToNode: true,
+    cursor: 'pointer',
+
+    // ✨ 핵심 수정 1: 클릭 이벤트를 제어하기 위한 plotOptions 추가
+    plotOptions: {
+        sunburst: {
+            point: {
+                events: {
+                    // 드릴다운을 위한 클릭 이벤트는 그대로 두고,
+                    // 툴팁(팝업)은 마우스 오버로 표시하는 것이 사용자 경험에 더 좋습니다.
+                    // 만약 반드시 '클릭' 시에만 팝업이 뜨게 하려면, 
+                    // Highcharts의 복잡한 커스텀 이벤트 설정이 필요합니다.
+                    // 여기서는 표준적인 '마우스 오버' 방식을 사용합니다.
+                }
+            }
+        }
+    },
+
+    dataLabels: { format: '{point.name}' },
+    levels: [{ level: 2, colorByPoint: true },
+             { level: 3, colorVariation: { key: 'brightness', to: -0.5 } }]
+  }],
+
+  // ✨ 핵심 수정 2: 툴팁(팝업) 내용을 동적으로 생성
+  tooltip: {
+    formatter: function () {
+        var point = this.point;
+        var tooltip_text = '<b>' + point.name + '</b>';
+
+        // 마지막 레벨의 조각인지 확인 (value가 있는 경우)
+        if (point.value) {
+            tooltip_text += '<br><hr style="border-top: 1px solid #ccc; margin: 5px 0;">';
+            if (point.options.description) {
+                tooltip_text += '<b>설명:</b> ' + point.options.description + '<br>';
+            }
+            if (point.options.nearby_facilities) {
+                tooltip_text += '<b>인근 시설:</b> ' + point.options.nearby_facilities;
+            }
+        } else {
+            // 상위 레벨일 경우, 총 개수 표시
+            tooltip_text += '<br>하위 시설 총 개수: ' + point.val;
+        }
+        return tooltip_text;
+    },
+    // useHTML: true // HTML 태그를 툴팁에 사용하기 위해 필요
+  }
+});
+</script>
+</body>
+</html>
