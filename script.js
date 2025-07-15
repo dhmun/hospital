@@ -9,8 +9,8 @@ const customColors = [
 
 Highcharts.chart('container', {
     chart: { height: '100%' },
-    title: { text: '의료 시설 분포 현황' },
-    subtitle: { text: '데이터 출처: data.xlsx' },
+    title: { text: '북한 의료 시설 분포 현황' },
+    subtitle: { text: '데이터 출처: 북한 스마트폰 내부 DB' },
 
     // ✨ 핵심 수정 1: 차트의 기본 색상으로 위에서 정의한 팔레트를 사용합니다.
     colors: customColors,
