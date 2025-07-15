@@ -1,29 +1,24 @@
 
-
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Highcharts Sunburst with Popup</title>
-<style>
-/* CSS 스타일은 이전과 동일 */
-.highcharts-figure, .highcharts-data-table table { min-width: 320px; max-width: 800px; margin: 1em auto; }
-#container { height: 800px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Highcharts Sunburst (Final Version)</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/sunburst.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/sunburst.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-<figure class="highcharts-figure">
-  <div id="container"></div>
-</figure>
+    <figure class="highcharts-figure">
+      <div id="container"></div>
+    </figure>
 
-<script>
-var data = [
+    <script>
+        window.chartData = [
   {
     "id": "root",
     "parent": "",
@@ -4633,63 +4628,8 @@ var data = [
     "nearby_facilities": ""
   }
 ];
+    </script>
 
-Highcharts.chart('container', {
-  chart: { height: '100%' },
-  title: { text: '의료 시설 분포 현황' },
-  subtitle: { text: '데이터 출처: data.xlsx' },
-
-  series: [{
-    type: 'sunburst',
-    data: data,
-    name: 'Root',
-    allowDrillToNode: true,
-    cursor: 'pointer',
-
-    // ✨ 핵심 수정 1: 클릭 이벤트를 제어하기 위한 plotOptions 추가
-    plotOptions: {
-        sunburst: {
-            point: {
-                events: {
-                    // 드릴다운을 위한 클릭 이벤트는 그대로 두고,
-                    // 툴팁(팝업)은 마우스 오버로 표시하는 것이 사용자 경험에 더 좋습니다.
-                    // 만약 반드시 '클릭' 시에만 팝업이 뜨게 하려면, 
-                    // Highcharts의 복잡한 커스텀 이벤트 설정이 필요합니다.
-                    // 여기서는 표준적인 '마우스 오버' 방식을 사용합니다.
-                }
-            }
-        }
-    },
-
-    dataLabels: { format: '{point.name}' },
-    levels: [{ level: 2, colorByPoint: true },
-             { level: 3, colorVariation: { key: 'brightness', to: -0.5 } }]
-  }],
-
-  // ✨ 핵심 수정 2: 툴팁(팝업) 내용을 동적으로 생성
-  tooltip: {
-    formatter: function () {
-        var point = this.point;
-        var tooltip_text = '<b>' + point.name + '</b>';
-
-        // 마지막 레벨의 조각인지 확인 (value가 있는 경우)
-        if (point.value) {
-            tooltip_text += '<br><hr style="border-top: 1px solid #ccc; margin: 5px 0;">';
-            if (point.options.description) {
-                tooltip_text += '<b>설명:</b> ' + point.options.description + '<br>';
-            }
-            if (point.options.nearby_facilities) {
-                tooltip_text += '<b>인근 시설:</b> ' + point.options.nearby_facilities;
-            }
-        } else {
-            // 상위 레벨일 경우, 총 개수 표시
-            tooltip_text += '<br>하위 시설 총 개수: ' + point.val;
-        }
-        return tooltip_text;
-    },
-    // useHTML: true // HTML 태그를 툴팁에 사용하기 위해 필요
-  }
-});
-</script>
+    <script src="script.js" defer></script>
 </body>
 </html>
